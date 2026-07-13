@@ -1,0 +1,137 @@
+<!--
+  Your Progress page — full stats and per-lesson breakdown.
+  WCAG 4.1.2: Progress bars have full ARIA attributes.
+  WCAG 1.4.1: All stats use text, not color alone.
+  WCAG 2.4.6: Section headings describe their content.
+-->
+
+<h1>Your Progress</h1>
+<p style="color:var(--fp-text-2); margin-bottom:var(--fp-space-2);">
+  You have mastered <%= masteryPct %>% of your current path. Keep it up!
+</p>
+
+<!-- Overall mastery bar -->
+<div class="session-progress" style="margin-bottom:var(--fp-space-8);">
+  <div
+    role="progressbar"
+    aria-valuenow="<%= masteryPct %>"
+    aria-valuemin="0"
+    aria-valuemax="100"
+    aria-label="Overall mastery: <%= masteryPct %> percent"
+    class="progress-bar session-progress__bar"
+  >
+    <div class="progress-bar__fill" style="width:<%= masteryPct %>%"></div>
+  </div>
+  <span class="session-progress__label"><%= masteryPct %>%</span>
+</div>
+
+<!-- Stats cards -->
+<section aria-labelledby="overview-heading" style="margin-bottom:var(--fp-space-8);">
+  <h2 id="overview-heading">Overview</h2>
+
+  <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(140px, 1fr)); gap:var(--fp-space-4);">
+
+    <div class="card" style="text-align:center;">
+      <p style="font-size:var(--fp-text-xs); color:var(--fp-text-2); margin-bottom:var(--fp-space-1);">Level</p>
+      <p style="font-size:var(--fp-text-2xl); font-weight:700; margin:0;">
+        <%= userStats ? userStats.current_level : 1 %>
+      </p>
+    </div>
+
+    <div class="card" style="text-align:center;">
+      <p style="font-size:var(--fp-text-xs); color:var(--fp-text-2); margin-bottom:var(--fp-space-1);">Streak</p>
+      <p style="font-size:var(--fp-text-2xl); font-weight:700; margin:0;">
+        <%= userStats ? userStats.current_streak : 0 %> Days
+      </p>
+    </div>
+
+    <div class="card" style="text-align:center;">
+      <p style="font-size:var(--fp-text-xs); color:var(--fp-text-2); margin-bottom:var(--fp-space-1);">Total XP</p>
+      <p style="font-size:var(--fp-text-2xl); font-weight:700; margin:0;">
+        <%= userStats ? userStats.total_xp : 0 %>
+      </p>
+    </div>
+
+    <div class="card" style="text-align:center;">
+      <p style="font-size:var(--fp-text-xs); color:var(--fp-text-2); margin-bottom:var(--fp-space-1);">Accuracy</p>
+      <p style="font-size:var(--fp-text-2xl); font-weight:700; margin:0;">
+        <%= accuracy %>%
+      </p>
+    </div>
+
+  </div>
+</section>
+
+<!-- Skill Breakdown -->
+<section aria-labelledby="skills-heading" style="margin-bottom:var(--fp-space-8);">
+  <h2 id="skills-heading">Skill Breakdown</h2>
+
+  <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(140px, 1fr)); gap:var(--fp-space-4);">
+    <%
+      const skills = [
+        { name: 'Reading',   icon: '📖', pct: userStats ? userStats.reading_pct : 0 },
+        { name: 'Listening', icon: '🎧', pct: userStats ? userStats.listening_pct : 0 },
+        { name: 'Speaking',  icon: '🗣', pct: userStats ? userStats.speaking_pct : 0 },
+        { name: 'Writing',   icon: '✏️', pct: userStats ? userStats.writing_pct : 0 },
+      ];
+    %>
+    <% skills.forEach(skill => { %>
+      <div class="skill-card">
+        <div class="skill-card__header">
+          <span aria-hidden="true" style="font-size:var(--fp-text-xl);"><%= skill.icon %></span>
+          <span class="skill-card__name"><%= skill.name %></span>
+        </div>
+        <div
+          role="progressbar"
+          aria-valuenow="<%= skill.pct %>"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          aria-label="<%= skill.name %>: <%= skill.pct %> percent complete"
+          class="progress-bar"
+          style="margin-top:var(--fp-space-2);"
+        >
+          <div class="progress-bar__fill" style="width:<%= skill.pct %>%"></div>
+        </div>
+        <p style="font-size:var(--fp-text-xs); color:var(--fp-text-2); margin-top:var(--fp-space-1); margin-bottom:0;">
+          <%= skill.pct %>% complete
+        </p>
+      </div>
+    <% }) %>
+  </div>
+</section>
+
+<!-- Per-lesson progress -->
+<section aria-labelledby="lessons-progress-heading">
+  <h2 id="lessons-progress-heading">Lessons Progress</h2>
+
+  <% if (allLessons && allLessons.length > 0) { %>
+    <div style="display:flex; flex-direction:column; gap:var(--fp-space-3);">
+      <% allLessons.forEach(lesson => { %>
+        <div class="lesson-item" style="cursor:default;">
+          <div style="flex:1;">
+            <p class="lesson-item__title"><%= lesson.title %></p>
+            <p class="lesson-item__meta">
+              <%= lesson.completedExercises %> of <%= lesson.totalExercises %> exercises completed
+            </p>
+          </div>
+          <div style="min-width:100px;">
+            <div
+              role="progressbar"
+              aria-valuenow="<%= lesson.progressPct %>"
+              aria-valuemin="0"
+              aria-valuemax="100"
+              aria-label="<%= lesson.title %>: <%= lesson.progressPct %> percent"
+              class="progress-bar"
+              style="width:80px;"
+            >
+              <div class="progress-bar__fill" style="width:<%= lesson.progressPct %>%"></div>
+            </div>
+            <span style="font-size:var(--fp-text-xs); color:var(--fp-text-2);"><%= lesson.progressPct %>%</span>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  <% } else { %>
+    <p>No lessons available.</p>
+  <% } %>
+</section>

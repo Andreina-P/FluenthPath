@@ -1,0 +1,102 @@
+<!--
+  Assessment question page.
+  WCAG 3.3.4: Continue button uses aria-disabled until an option is selected.
+  WCAG 2.4.2: Title shows "Question X of Y".
+  Same multiple-choice pattern as exercises but with assessment-specific header.
+-->
+
+<!-- Assessment header -->
+<div class="assessment-header">
+  <div class="assessment-header__tags">
+    <span class="assessment-tag assessment-tag--active">
+      Question <%= questionNum %> of <%= totalQuestions %>
+    </span>
+    <span class="assessment-tag">Adapting to your level</span>
+  </div>
+
+  <% if (timerEnabled && remainingSeconds !== null) { %>
+    <%
+      const mins = Math.floor(remainingSeconds / 60);
+      const secs = remainingSeconds % 60;
+      const timerText = `${mins}:${secs.toString().padStart(2, '0')}`;
+      const isWarning = remainingSeconds < 120;
+    %>
+    <div class="assessment-timer<%= isWarning ? ' assessment-timer--warning' : '' %>"
+         aria-label="Time remaining: <%= mins %> minutes and <%= secs %> seconds">
+      <svg class="assessment-timer__icon" aria-hidden="true" focusable="false" viewBox="0 0 16 16" fill="none">
+        <circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5"/>
+        <path d="M8 4v4l2.5 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      <span><%= timerText %></span>
+    </div>
+  <% } %>
+</div>
+
+<!-- Exit test link -->
+<div style="text-align:right; margin-bottom:var(--fp-space-4);">
+  <a href="/dashboard" style="font-size:var(--fp-text-sm); color:var(--fp-text-2);">
+    Exit test
+  </a>
+</div>
+
+<div class="exercise-page">
+
+  <form id="exercise-form" action="/assessment/submit" method="POST">
+
+    <fieldset>
+      <legend class="exercise-question"><%= exercise.question_text %></legend>
+
+      <!-- Hint if available -->
+      <% if (exercise.pro_tip) { %>
+        <div class="exercise-instruction" style="margin-bottom:var(--fp-space-4);">
+          <p style="margin:0; font-size:var(--fp-text-xs); color:var(--fp-text-2);">
+            <svg aria-hidden="true" focusable="false" width="14" height="14" viewBox="0 0 14 14" fill="none" style="vertical-align:-2px; margin-right:4px;">
+              <circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.2"/>
+              <path d="M7 6v3M7 4.5v.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+            </svg>
+            Think about the structure of the third conditional for past hypothetical situations.
+          </p>
+        </div>
+      <% } %>
+
+      <% exercise.options.forEach(opt => { %>
+        <div class="option">
+          <label class="option__label" for="opt-<%= opt.label %>">
+            <input
+              type="radio"
+              class="option__radio"
+              id="opt-<%= opt.label %>"
+              name="answer"
+              value="<%= opt.text %>"
+            >
+            <span class="option__key" aria-hidden="true"><%= opt.label %></span>
+            <span><%= opt.text %></span>
+          </label>
+        </div>
+      <% }) %>
+    </fieldset>
+
+    <%- include('../partials/keyboard-hint', { showOptionKeys: true }) %>
+
+    <div class="exercise-actions">
+      <div></div>
+      <div>
+        <button
+          type="submit"
+          id="exercise-submit"
+          class="btn btn-primary btn--inactive"
+          aria-disabled="true"
+          aria-describedby="select-hint"
+        >
+          Continue Test
+        </button>
+        <p id="select-hint" class="select-instruction" tabindex="-1">
+          Select an option to continue
+        </p>
+      </div>
+    </div>
+
+  </form>
+</div>
+
+<script src="/js/exercise.js" defer></script>

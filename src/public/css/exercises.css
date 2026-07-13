@@ -1,0 +1,55 @@
+/* ============================================================
+   FluentPath — exercises.css
+   Exercise-specific layout styles.
+   Component styles (word bank, options, audio player) are in
+   components.css — this file handles page-level layout only.
+   ============================================================ */
+
+/* --- Exercise page wrapper --------------------------------- */
+.exercise-page {
+  max-width: 680px;
+}
+
+/* --- Exercise instruction ----------------------------------- */
+.exercise-instruction {
+  font-size: var(--fp-text-sm);
+  color: var(--fp-text-2);
+  margin-bottom: var(--fp-space-4);
+  line-height: 1.5;
+}
+
+/* --- Exercise actions (Skip + Check Answer / Continue) ------ */
+.exercise-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--fp-space-4);
+  padding-top: var(--fp-space-6);
+  border-top: 1px solid var(--fp-border-card);
+  margin-top: var(--fp-space-6);
+}
+
+/* --- Keyboard shortcut legend (WCAG 3.6 — Recognition) ----- */
+.keyboard-legend {
+  display: flex;
+  align-items: center;
+  gap: var(--fp-space-2);
+  font-size: var(--fp-text-xs);
+  color: var(--fp-text-2);
+  margin-top: var(--fp-space-4);
+}
+
+.keyboard-legend kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 var(--fp-space-1);
+  background: var(--fp-bg);
+  border: 1px solid var(--fp-border-card);
+  border-radius: var(--fp-radius-sm);
+  font-family: var(--fp-font-mono);
+  font-size: var(--fp-text-xs);
+  color: var(--fp-text-2);
+}

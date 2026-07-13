@@ -1,0 +1,90 @@
+<!--
+  Speaking exercise — listen to model audio, practice out loud.
+  Decision: No Web Speech API. User presses "I practiced this" when done.
+  WCAG 1.4.2: Audio does not auto-play.
+  WCAG 1.2.1: Transcript always available.
+  WCAG 2.1.1: Single button to complete — fully keyboard native.
+-->
+
+<% if (lesson) { %>
+  <nav aria-label="Breadcrumb" style="margin-bottom:var(--fp-space-4);">
+    <p style="font-size:var(--fp-text-sm); color:var(--fp-text-2); margin:0;">
+      <a href="/dashboard">Dashboard</a> &rsaquo;
+      <a href="/lessons/<%= lesson.id %>"><%= lesson.title %></a> &rsaquo;
+      <span aria-current="page">Exercise <%= sessionCurrent %></span>
+    </p>
+  </nav>
+<% } %>
+
+<% if (sessionTotal > 0) { %>
+  <div class="session-progress">
+    <div
+      role="progressbar"
+      aria-valuenow="<%= sessionCurrent %>"
+      aria-valuemin="0"
+      aria-valuemax="<%= sessionTotal %>"
+      aria-label="Exercise <%= sessionCurrent %> of <%= sessionTotal %>"
+      class="progress-bar session-progress__bar"
+    >
+      <div class="progress-bar__fill" style="width:<%= Math.round(sessionCurrent / sessionTotal * 100) %>%"></div>
+    </div>
+    <span class="session-progress__label"><%= sessionCurrent %> / <%= sessionTotal %></span>
+  </div>
+<% } %>
+
+<div class="exercise-page">
+
+  <div class="exercise-instruction">
+    <p style="margin:0;"><%= exercise.instruction %></p>
+  </div>
+
+  <p class="exercise-question"><%= exercise.question_text %></p>
+
+  <!-- Model audio -->
+  <div class="audio-player">
+    <audio controls aria-label="Model pronunciation. Listen and repeat.">
+      <source src="<%= exercise.audio_url %>" type="audio/mpeg">
+      Your browser does not support the audio element.
+    </audio>
+  </div>
+
+  <!-- Transcript -->
+  <% if (exercise.transcript) { %>
+    <details class="transcript">
+      <summary>Show transcript</summary>
+      <p class="transcript__text"><%= exercise.transcript %></p>
+    </details>
+  <% } %>
+
+  <!-- Practice instructions -->
+  <div class="card" style="margin-top:var(--fp-space-5); text-align:center; padding:var(--fp-space-6);">
+    <p style="font-size:var(--fp-text-lg); font-weight:600; margin-bottom:var(--fp-space-2);">
+      Practice speaking out loud
+    </p>
+    <p style="color:var(--fp-text-2); margin-bottom:var(--fp-space-5);">
+      Listen to the model audio above, then repeat the sentence out loud.
+      When you are done, press the button below.
+    </p>
+
+    <!--
+      Simple form — "I practiced this" always submits.
+      No aria-disabled pattern needed because there is no wrong answer.
+      The answer value "practiced" is what the controller expects.
+    -->
+    <form action="/exercises/<%= exercise.id %>/submit" method="POST">
+      <input type="hidden" name="answer" value="practiced">
+      <button type="submit" id="speaking-done" class="btn btn-primary" style="min-width:200px;">
+        I practiced this
+      </button>
+    </form>
+  </div>
+
+  <div class="exercise-actions" style="border-top:none; margin-top:var(--fp-space-4);">
+    <div class="exercise-actions__secondary">
+      <% if (lesson) { %>
+        <a href="/lessons/<%= lesson.id %>" class="btn btn-ghost">Back to lesson</a>
+      <% } %>
+    </div>
+  </div>
+
+</div>

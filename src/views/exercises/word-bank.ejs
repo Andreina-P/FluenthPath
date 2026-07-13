@@ -1,0 +1,122 @@
+<!--
+  Word bank exercise — keyboard-native drag-and-drop replacement.
+  WCAG 2.1.1: All via Tab + Enter/Space. No dragging.
+  WCAG 2.5.7: No path-based gestures required.
+  WCAG 4.1.3: word-bank.js announces changes via LiveRegion.
+  WCAG 4.1.2: aria-pressed on each word button.
+-->
+
+<% if (lesson) { %>
+  <nav aria-label="Breadcrumb" style="margin-bottom:var(--fp-space-4);">
+    <p style="font-size:var(--fp-text-sm); color:var(--fp-text-2); margin:0;">
+      <a href="/dashboard">Dashboard</a> &rsaquo;
+      <a href="/lessons/<%= lesson.id %>"><%= lesson.title %></a> &rsaquo;
+      <span aria-current="page">Exercise <%= sessionCurrent %></span>
+    </p>
+  </nav>
+<% } %>
+
+<% if (sessionTotal > 0) { %>
+  <div class="session-progress">
+    <div
+      role="progressbar"
+      aria-valuenow="<%= sessionCurrent %>"
+      aria-valuemin="0"
+      aria-valuemax="<%= sessionTotal %>"
+      aria-label="Exercise <%= sessionCurrent %> of <%= sessionTotal %>"
+      class="progress-bar session-progress__bar"
+    >
+      <div class="progress-bar__fill" style="width:<%= Math.round(sessionCurrent / sessionTotal * 100) %>%"></div>
+    </div>
+    <span class="session-progress__label"><%= sessionCurrent %> / <%= sessionTotal %></span>
+  </div>
+<% } %>
+
+<div class="exercise-page">
+
+  <div class="exercise-instruction">
+    <p style="margin:0;"><%= exercise.instruction %></p>
+  </div>
+
+  <p class="exercise-question"><%= exercise.question_text %></p>
+
+  <form id="exercise-form" action="/exercises/<%= exercise.id %>/submit" method="POST">
+
+    <!-- Hidden input synced by word-bank.js -->
+    <input type="hidden" id="word-bank-answer" name="answer" value="">
+
+    <!--
+      Sentence builder area.
+      Shows selected words in order.
+      Starts with a placeholder that disappears on first word.
+    -->
+    <div aria-label="Your sentence" class="sentence-builder" id="sentence-builder">
+      <span id="builder-placeholder" class="sentence-builder__placeholder">
+        Select words below to build your sentence.
+      </span>
+    </div>
+
+    <!-- Remove last word button -->
+    <div style="margin-bottom:var(--fp-space-4); text-align:right;">
+      <button
+        type="button"
+        id="word-bank-remove"
+        class="btn btn-ghost"
+        style="font-size:var(--fp-text-sm);"
+      >
+        Remove last word
+      </button>
+    </div>
+
+    <!--
+      Word bank — each word is a <button> with aria-pressed.
+      Tab navigates between buttons. Enter/Space selects.
+      No drag-and-drop anywhere.
+    -->
+    <section aria-label="Word bank">
+      <h3 style="font-size:var(--fp-text-sm); font-weight:600; color:var(--fp-text-2); margin-bottom:var(--fp-space-2);">
+        Word Bank
+      </h3>
+      <div class="word-bank" id="word-bank">
+        <% exercise.word_bank_items.forEach(word => { %>
+          <button
+            type="button"
+            class="word-bank__btn"
+            data-word="<%= word %>"
+            aria-pressed="false"
+          >
+            <%= word %>
+          </button>
+        <% }) %>
+      </div>
+    </section>
+
+    <%- include('../partials/keyboard-hint', { showOptionKeys: false }) %>
+
+    <div class="exercise-actions">
+      <div class="exercise-actions__secondary">
+        <% if (lesson) { %>
+          <a href="/lessons/<%= lesson.id %>" class="btn btn-ghost">Back to lesson</a>
+        <% } %>
+      </div>
+      <div>
+        <button
+          type="submit"
+          id="exercise-submit"
+          class="btn btn-primary btn--inactive"
+          aria-disabled="true"
+          aria-describedby="select-hint"
+        >
+          Check Answer
+        </button>
+        <p id="select-hint" class="select-instruction" tabindex="-1">
+          Select words to build your sentence
+        </p>
+      </div>
+    </div>
+
+  </form>
+</div>
+
+<script src="/js/exercise.js" defer></script>
+<script src="/js/word-bank.js" defer></script>

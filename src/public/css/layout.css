@@ -1,0 +1,227 @@
+/* ============================================================
+   FluentPath — layout.css
+   Page structure: header, nav, sidebar, main, footer
+   ============================================================ */
+
+/* --- Skip link (visible only on focus — see focus.css) ----- */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 0;
+  background: var(--fp-surface);
+  color: var(--fp-primary);
+  padding: var(--fp-space-3) var(--fp-space-6);
+  font-weight: 700;
+  font-size: var(--fp-text-sm);
+  text-decoration: none;
+  z-index: 9999;
+  border-radius: 0 0 var(--fp-radius) 0;
+}
+
+/* --- Site header -------------------------------------------- */
+.site-header {
+  background: var(--fp-surface);
+  border-bottom: 1px solid var(--fp-border-card);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: var(--fp-shadow-sm);
+}
+
+/* WCAG 2.4.11: Prevent sticky header obscuring focused elements */
+:target,
+main:target {
+  scroll-margin-top: 72px;
+}
+
+.site-header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 var(--fp-space-6);
+  height: 64px;
+  gap: var(--fp-space-4);
+}
+
+/* --- Logo --------------------------------------------------- */
+.site-logo {
+  display: flex;
+  align-items: center;
+  gap: var(--fp-space-2);
+  text-decoration: none;
+  color: var(--fp-text-1);
+  font-size: var(--fp-text-lg);
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.site-logo:hover { color: var(--fp-primary); }
+
+/* --- Primary navigation ------------------------------------ */
+.site-nav {
+  display: flex;
+  align-items: center;
+  gap: var(--fp-space-1);
+  flex: 1;
+  justify-content: center;
+}
+
+.site-nav__link {
+  display: flex;
+  align-items: center;
+  gap: var(--fp-space-2);
+  padding: var(--fp-space-2) var(--fp-space-3);
+  border-radius: var(--fp-radius);
+  text-decoration: none;
+  color: var(--fp-text-2);
+  font-size: var(--fp-text-sm);
+  font-weight: 500;
+  min-height: 44px;    /* WCAG 2.5.8: minimum target size */
+  min-width: 44px;
+  white-space: nowrap;
+}
+
+.site-nav__link:hover {
+  background: var(--fp-bg);
+  color: var(--fp-text-1);
+  text-decoration: none;
+}
+
+/* aria-current="page" set by EJS based on currentPage local */
+.site-nav__link[aria-current="page"] {
+  color: var(--fp-primary);
+  background: var(--fp-primary-light);
+  font-weight: 600;
+}
+
+/* --- Header actions ---------------------------------------- */
+.site-header__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--fp-space-2);
+  flex-shrink: 0;
+}
+
+/* --- Page layout ------------------------------------------- */
+/* Sidebar is AFTER main in DOM (correct screen reader order).
+   CSS flex order places it visually on the left.            */
+.page-layout {
+  display: flex;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: var(--fp-space-6);
+  gap: var(--fp-space-6);
+  align-items: flex-start;
+}
+
+.page-layout > main {
+  order: 2;         /* Visual: right side */
+  flex: 1;
+  min-width: 0;     /* Prevent flex overflow */
+}
+
+.site-sidebar {
+  order: 1;         /* Visual: left side */
+  width: 260px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 80px;        /* Below sticky header */
+  max-height: calc(100vh - 96px);
+  overflow-y: auto;
+}
+
+/* main as skip-link target — tabindex="-1" needs no visible ring */
+main:focus {
+  outline: none;
+}
+
+/* --- Centered layout (login, register, assessment) --------- */
+.page-layout--centered {
+  justify-content: center;
+  min-height: calc(100vh - 64px);
+  align-items: center;
+  padding: var(--fp-space-8) var(--fp-space-6);
+}
+
+.page-layout--centered > main {
+  order: unset;
+  flex: none;
+  width: 100%;
+  max-width: 440px;
+}
+
+/* --- Sidebar sections -------------------------------------- */
+.sidebar-section {
+  background: var(--fp-surface);
+  border: 1px solid var(--fp-border-card);
+  border-radius: var(--fp-radius-lg);
+  padding: var(--fp-space-4);
+  margin-bottom: var(--fp-space-4);
+  box-shadow: var(--fp-shadow-sm);
+}
+
+.sidebar-section__title {
+  font-size: var(--fp-text-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--fp-text-2);
+  margin-bottom: var(--fp-space-3);
+}
+
+/* --- Footer ------------------------------------------------- */
+.site-footer {
+  border-top: 1px solid var(--fp-border-card);
+  padding: var(--fp-space-6);
+  text-align: center;
+  font-size: var(--fp-text-sm);
+  color: var(--fp-text-2);
+  margin-top: auto;
+}
+
+/* --- Page section heading spacing -------------------------- */
+.page-heading {
+  margin-bottom: var(--fp-space-6);
+  padding-bottom: var(--fp-space-4);
+  border-bottom: 1px solid var(--fp-border-card);
+}
+
+/* --- Responsive -------------------------------------------- */
+@media (max-width: 900px) {
+  .page-layout {
+    flex-direction: column;
+    padding: var(--fp-space-4);
+  }
+
+  .site-sidebar {
+    order: 2;         /* Below main on mobile */
+    width: 100%;
+    position: static;
+    max-height: none;
+  }
+
+  .page-layout > main {
+    order: 1;
+  }
+}
+
+@media (max-width: 600px) {
+  .site-nav {
+    display: none; /* Hidden on mobile; provide a mobile nav if needed */
+  }
+
+  .site-header__inner {
+    padding: 0 var(--fp-space-4);
+  }
+}
+
+/* WCAG 1.4.10: Reflow — no horizontal scroll at 320px */
+@media (max-width: 320px) {
+  .page-layout,
+  .site-header__inner {
+    padding-left: var(--fp-space-3);
+    padding-right: var(--fp-space-3);
+  }
+}

@@ -1,0 +1,96 @@
+<!--
+  Translation exercise.
+  WCAG 3.3.2: Visible label for the text input.
+  WCAG 3.3.4: Submit button aria-disabled until text is entered.
+  WCAG 2.1.1: Standard text input — fully keyboard native.
+-->
+
+<% if (lesson) { %>
+  <nav aria-label="Breadcrumb" style="margin-bottom:var(--fp-space-4);">
+    <p style="font-size:var(--fp-text-sm); color:var(--fp-text-2); margin:0;">
+      <a href="/dashboard">Dashboard</a> &rsaquo;
+      <a href="/lessons/<%= lesson.id %>"><%= lesson.title %></a> &rsaquo;
+      <span aria-current="page">Exercise <%= sessionCurrent %></span>
+    </p>
+  </nav>
+<% } %>
+
+<% if (sessionTotal > 0) { %>
+  <div class="session-progress">
+    <div
+      role="progressbar"
+      aria-valuenow="<%= sessionCurrent %>"
+      aria-valuemin="0"
+      aria-valuemax="<%= sessionTotal %>"
+      aria-label="Exercise <%= sessionCurrent %> of <%= sessionTotal %>"
+      class="progress-bar session-progress__bar"
+    >
+      <div class="progress-bar__fill" style="width:<%= Math.round(sessionCurrent / sessionTotal * 100) %>%"></div>
+    </div>
+    <span class="session-progress__label"><%= sessionCurrent %> / <%= sessionTotal %></span>
+  </div>
+<% } %>
+
+<div class="exercise-page">
+
+  <div class="exercise-instruction">
+    <p style="margin:0;"><%= exercise.instruction %></p>
+  </div>
+
+  <p class="exercise-question"><%= exercise.question_text %></p>
+
+  <form id="exercise-form" action="/exercises/<%= exercise.id %>/submit" method="POST">
+
+    <div class="form-group">
+      <label for="answer" class="form-label">Your translation</label>
+      <input
+        type="text"
+        id="answer"
+        name="answer"
+        class="form-input"
+        autocomplete="off"
+        aria-describedby="translate-hint"
+      >
+      <p id="translate-hint" class="form-hint">
+        Type your translation in English.
+      </p>
+    </div>
+
+    <!-- Word bank hint (if available) -->
+    <% if (exercise.word_bank_items && exercise.word_bank_items.length > 0) { %>
+      <details class="transcript" style="margin-bottom:var(--fp-space-4);">
+        <summary>Show word hints</summary>
+        <p class="transcript__text">
+          Available words: <%= exercise.word_bank_items.join(', ') %>
+        </p>
+      </details>
+    <% } %>
+
+    <%- include('../partials/keyboard-hint', { showOptionKeys: false }) %>
+
+    <div class="exercise-actions">
+      <div class="exercise-actions__secondary">
+        <% if (lesson) { %>
+          <a href="/lessons/<%= lesson.id %>" class="btn btn-ghost">Back to lesson</a>
+        <% } %>
+      </div>
+      <div>
+        <button
+          type="submit"
+          id="exercise-submit"
+          class="btn btn-primary btn--inactive"
+          aria-disabled="true"
+          aria-describedby="select-hint"
+        >
+          Check Answer
+        </button>
+        <p id="select-hint" class="select-instruction" tabindex="-1">
+          Type your answer to continue
+        </p>
+      </div>
+    </div>
+
+  </form>
+</div>
+
+<script src="/js/exercise.js" defer></script>

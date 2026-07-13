@@ -1,0 +1,91 @@
+<!--
+  Lesson detail page.
+  WCAG 2.4.2: Title includes lesson name.
+  WCAG 2.4.4: Exercise links describe the exercise type and number.
+  WCAG 1.4.1: Completion status uses text + icon, not color alone.
+-->
+
+<nav aria-label="Breadcrumb" style="margin-bottom:var(--fp-space-4);">
+  <p style="font-size:var(--fp-text-sm); color:var(--fp-text-2); margin:0;">
+    <a href="/dashboard">Dashboard</a> &rsaquo;
+    <a href="/lessons">Lessons</a> &rsaquo;
+    <span aria-current="page"><%= lesson.title %></span>
+  </p>
+</nav>
+
+<h1><%= lesson.title %></h1>
+<p style="color:var(--fp-text-2); margin-bottom:var(--fp-space-2);"><%= lesson.description %></p>
+
+<!-- Session progress -->
+<div class="session-progress" style="margin-bottom:var(--fp-space-6);">
+  <div
+    role="progressbar"
+    aria-valuenow="<%= completedEx %>"
+    aria-valuemin="0"
+    aria-valuemax="<%= totalEx %>"
+    aria-label="Lesson progress: <%= completedEx %> of <%= totalEx %> exercises completed"
+    class="progress-bar session-progress__bar"
+  >
+    <div class="progress-bar__fill" style="width:<%= totalEx > 0 ? Math.round(completedEx / totalEx * 100) : 0 %>%"></div>
+  </div>
+  <span class="session-progress__label"><%= completedEx %> / <%= totalEx %> completed</span>
+</div>
+
+<!-- Exercise list -->
+<section aria-labelledby="exercises-heading" style="margin-bottom:var(--fp-space-8);">
+  <h2 id="exercises-heading">Exercises</h2>
+
+  <% if (exercises && exercises.length > 0) { %>
+    <div style="display:flex; flex-direction:column; gap:var(--fp-space-3);">
+      <% exercises.forEach((ex, i) => { %>
+
+        <%
+          const typeLabels = {
+            multiple_choice: 'Multiple choice',
+            translate:       'Translation',
+            listening:       'Listening',
+            word_bank:       'Word bank',
+            speaking:        'Speaking practice',
+          };
+          const typeLabel = typeLabels[ex.type] || ex.type;
+        %>
+
+        <a href="/exercises/<%= ex.id %>" class="lesson-item">
+          <div>
+            <p class="lesson-item__title">
+              <%- ex.completed
+                ? '<span aria-hidden="true" style="color:var(--fp-success);">&#10003;</span> '
+                : '' %>
+              Exercise <%= i + 1 %>: <%= typeLabel %>
+            </p>
+            <p class="lesson-item__meta"><%= ex.instruction %></p>
+          </div>
+          <div style="min-width:90px; text-align:right;">
+            <% if (ex.completed) { %>
+              <!-- WCAG 1.4.1: Text label alongside the icon, not color alone -->
+              <span class="stat-badge stat-badge--success">
+                <span aria-hidden="true">&#10003;</span> Completed
+              </span>
+            <% } else { %>
+              <span class="stat-badge stat-badge--primary">Start</span>
+            <% } %>
+          </div>
+        </a>
+
+      <% }) %>
+    </div>
+  <% } else { %>
+    <p>No exercises in this lesson yet.</p>
+  <% } %>
+</section>
+
+<!-- Vocabulary link -->
+<section aria-labelledby="vocab-heading">
+  <h2 id="vocab-heading">Vocabulary</h2>
+  <p style="color:var(--fp-text-2); margin-bottom:var(--fp-space-3);">
+    Review the key words and definitions for this lesson.
+  </p>
+  <a href="/lessons/<%= lesson.id %>/vocabulary" class="btn btn-secondary">
+    View vocabulary cards
+  </a>
+</section>

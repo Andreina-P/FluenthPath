@@ -1,0 +1,109 @@
+<!--
+  Sidebar partial.
+  role="complementary" + aria-label identifies this as a landmark.
+  DOM position: rendered AFTER main in the layout — screen readers
+  encounter main content first. CSS flex order places it visually left.
+
+  WCAG 1.3.2: Meaningful sequence — sidebar content is supplementary,
+  so reading it after main is the correct logical order.
+-->
+<aside class="site-sidebar" role="complementary" aria-label="Learning stats and navigation">
+
+  <!-- Quick Stats -->
+  <section class="sidebar-section" aria-labelledby="stats-heading">
+    <h2 id="stats-heading" class="sidebar-section__title">Quick Stats</h2>
+
+    <div style="display:flex; flex-direction:column; gap:0.5rem;">
+
+      <!-- Daily Goal -->
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <span style="font-size:0.875rem; color:var(--fp-text-2);">Daily Goal</span>
+        <%
+          const goalPct = typeof userStats !== 'undefined' && userStats
+            ? Math.round((userStats.daily_xp || 0) / 50 * 100)
+            : 0;
+        %>
+        <span class="stat-badge stat-badge--primary" aria-label="Daily goal: <%= goalPct %>% complete">
+          <%= goalPct %>%
+        </span>
+      </div>
+
+      <!--
+        Progress bar with full ARIA attributes (WCAG 4.1.2).
+        aria-label provides context beyond just the percentage number.
+      -->
+      <div
+        role="progressbar"
+        aria-valuenow="<%= goalPct %>"
+        aria-valuemin="0"
+        aria-valuemax="100"
+        aria-label="Daily goal: <%= goalPct %> of 100 percent complete"
+        class="progress-bar"
+      >
+        <div class="progress-bar__fill" style="width: <%= goalPct %>%"></div>
+      </div>
+
+      <!-- Current Streak -->
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.5rem;">
+        <span style="font-size:0.875rem; color:var(--fp-text-2);">Current Streak</span>
+        <span
+          class="stat-badge stat-badge--success"
+          aria-label="Current streak: <%= typeof userStats !== 'undefined' && userStats ? userStats.current_streak : 0 %> days"
+        >
+          <!-- Flame icon — aria-hidden, accessible name comes from aria-label above -->
+          <svg aria-hidden="true" focusable="false" width="12" height="12" viewBox="0 0 12 12" fill="none">
+            <path d="M6 1C6 1 9 4 9 7a3 3 0 11-6 0c0-1.5.75-3 1.5-3.5C4.5 4.5 6 6 6 6V1z" fill="currentColor"/>
+          </svg>
+          <%= typeof userStats !== 'undefined' && userStats ? userStats.current_streak : 0 %> Days
+        </span>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Recent Lessons -->
+  <section class="sidebar-section" aria-labelledby="recent-heading">
+    <h2 id="recent-heading" class="sidebar-section__title">Recent Lessons</h2>
+
+    <% if (typeof recentLessons !== 'undefined' && recentLessons && recentLessons.length > 0) { %>
+      <nav aria-label="Recently accessed lessons">
+        <ul role="list" style="display:flex; flex-direction:column; gap:0.25rem;">
+          <% recentLessons.forEach(lesson => { %>
+            <li>
+              <!--
+                WCAG 2.4.4: Link purpose clear from text alone.
+                The lesson title is descriptive enough without additional context.
+              -->
+              <a
+                href="/lessons/<%= lesson.id %>"
+                style="display:block; font-size:0.8125rem; color:var(--fp-text-1); text-decoration:none; padding:0.375rem 0.5rem; border-radius:var(--fp-radius-sm);"
+                onmouseover="this.style.background='var(--fp-bg)'"
+                onmouseout="this.style.background=''"
+              >
+                <%= lesson.title %>
+              </a>
+            </li>
+          <% }) %>
+        </ul>
+      </nav>
+    <% } else { %>
+      <p style="font-size:0.8125rem; color:var(--fp-text-2);">
+        No lessons started yet. <a href="/lessons">Browse lessons</a>.
+      </p>
+    <% } %>
+  </section>
+
+  <!-- Level Assessment shortcut (if not yet completed) -->
+  <% if (typeof userStats !== 'undefined' && userStats && !userStats.assessment_level) { %>
+    <section class="sidebar-section" aria-labelledby="assess-heading">
+      <h2 id="assess-heading" class="sidebar-section__title">Get Placed</h2>
+      <p style="font-size:0.8125rem; color:var(--fp-text-2); margin-bottom:0.75rem;">
+        Find your English level with a quick 2-question test.
+      </p>
+      <a href="/assessment" class="btn btn-secondary" style="width:100%; justify-content:center; font-size:0.8125rem;">
+        Start Level Assessment
+      </a>
+    </section>
+  <% } %>
+
+</aside>

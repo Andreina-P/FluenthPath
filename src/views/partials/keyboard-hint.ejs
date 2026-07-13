@@ -1,0 +1,18 @@
+<!--
+  Keyboard hint — shows available keyboard shortcuts.
+  WCAG 3.6 (Recognition): Makes shortcuts discoverable
+  without needing external documentation.
+  aria-hidden not needed — this text is useful for all users.
+-->
+<div class="keyboard-hint">
+  <span>Use keyboard:</span>
+  <% if (typeof showOptionKeys !== 'undefined' && showOptionKeys) { %>
+    <span class="keyboard-hint__key">A</span>
+    <span class="keyboard-hint__key">B</span>
+    <span class="keyboard-hint__key">C</span>
+    <span class="keyboard-hint__key">D</span>
+    <span style="margin:0 2px;">|</span>
+  <% } %>
+  <span class="keyboard-hint__key keyboard-hint__enter">Enter</span>
+  <span>to confirm</span>
+</div>

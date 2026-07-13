@@ -1,0 +1,59 @@
+<!--
+  Onboarding step 3: Ready to start.
+-->
+
+<div class="card" style="width:100%; text-align:center;">
+
+  <div
+    role="progressbar"
+    aria-valuenow="3"
+    aria-valuemin="1"
+    aria-valuemax="3"
+    aria-label="Step 3 of 3"
+    style="margin-bottom:var(--fp-space-5);"
+  >
+    <p style="font-size:var(--fp-text-xs); color:var(--fp-text-2); margin-bottom:var(--fp-space-2);">3 / 3</p>
+    <div class="progress-bar" style="max-width:200px; margin:0 auto;">
+      <div class="progress-bar__fill" style="width:100%"></div>
+    </div>
+  </div>
+
+  <h1 style="color:var(--fp-primary); margin-bottom:var(--fp-space-3);">You Are Ready</h1>
+  <p style="color:var(--fp-text-2); margin-bottom:var(--fp-space-6);">
+    Your learning journey starts now. Here is what you can do first:
+  </p>
+
+  <div class="card" style="background:var(--fp-bg); text-align:left; margin-bottom:var(--fp-space-6);">
+    <ul style="list-style:none; display:flex; flex-direction:column; gap:var(--fp-space-4);">
+      <li style="display:flex; align-items:flex-start; gap:var(--fp-space-3);">
+        <span aria-hidden="true" style="color:var(--fp-success); font-size:var(--fp-text-lg); line-height:1;">&#10003;</span>
+        <div>
+          <strong>See your correct answer and a quick tip</strong>
+          <p style="font-size:var(--fp-text-sm); color:var(--fp-text-2); margin:0;">After every exercise, you get feedback and a grammar explanation.</p>
+        </div>
+      </li>
+      <li style="display:flex; align-items:flex-start; gap:var(--fp-space-3);">
+        <span aria-hidden="true" style="color:var(--fp-success); font-size:var(--fp-text-lg); line-height:1;">&#10003;</span>
+        <div>
+          <strong>Earn points to track progress</strong>
+          <p style="font-size:var(--fp-text-sm); color:var(--fp-text-2); margin:0;">Get XP for every exercise, whether you get it right or not.</p>
+        </div>
+      </li>
+      <li style="display:flex; align-items:flex-start; gap:var(--fp-space-3);">
+        <span aria-hidden="true" style="color:var(--fp-success); font-size:var(--fp-text-lg); line-height:1;">&#10003;</span>
+        <div>
+          <strong>Take a level assessment</strong>
+          <p style="font-size:var(--fp-text-sm); color:var(--fp-text-2); margin:0;">Find your starting point with a quick 2-question test.</p>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <div style="display:flex; justify-content:center; align-items:center; gap:var(--fp-space-4);">
+    <a href="/onboarding/2" class="btn btn-ghost" style="font-size:var(--fp-text-sm);">Back</a>
+    <form action="/onboarding/complete" method="POST" style="display:inline;">
+      <button type="submit" class="btn btn-primary">Start learning</button>
+    </form>
+  </div>
+
+</div>

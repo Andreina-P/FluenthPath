@@ -1,0 +1,57 @@
+<!--
+  Vocabulary page — static cards, always visible.
+  Decision: No hover/tooltip. All definitions are shown permanently.
+  WCAG 1.3.3: Content does not depend on sensory characteristics.
+  WCAG 2.1.1: No mouse interaction required — Tab navigates between links.
+  WCAG 1.3.1: Each card is an <article> with semantic heading.
+-->
+
+<nav aria-label="Breadcrumb" style="margin-bottom:var(--fp-space-4);">
+  <p style="font-size:var(--fp-text-sm); color:var(--fp-text-2); margin:0;">
+    <a href="/dashboard">Dashboard</a> &rsaquo;
+    <a href="/lessons">Lessons</a> &rsaquo;
+    <a href="/lessons/<%= lesson.id %>"><%= lesson.title %></a> &rsaquo;
+    <span aria-current="page">Vocabulary</span>
+  </p>
+</nav>
+
+<h1>Vocabulary: <%= lesson.title %></h1>
+<p style="color:var(--fp-text-2); margin-bottom:var(--fp-space-6);">
+  Key words and definitions for this lesson. Read through them before starting the exercises.
+</p>
+
+<% if (words && words.length > 0) { %>
+  <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:var(--fp-space-4);">
+
+    <% words.forEach(word => { %>
+      <!--
+        Each vocabulary card is an <article> — semantically a self-contained
+        piece of content. Screen readers announce "article" on entry,
+        giving the user structural context.
+      -->
+      <article class="card vocabulary-card">
+        <h3 style="font-size:var(--fp-text-lg); margin-bottom:var(--fp-space-2);">
+          <%= word.word %>
+        </h3>
+        <p style="color:var(--fp-text-1); font-size:var(--fp-text-sm); margin-bottom:var(--fp-space-3); line-height:1.6;">
+          <%= word.definition %>
+        </p>
+        <% if (word.example) { %>
+          <p style="font-size:var(--fp-text-sm); color:var(--fp-text-2); margin:0; font-style:italic; border-top:1px solid var(--fp-border-card); padding-top:var(--fp-space-3);">
+            "<%= word.example %>"
+          </p>
+        <% } %>
+      </article>
+    <% }) %>
+
+  </div>
+<% } else { %>
+  <p>No vocabulary cards for this lesson yet.</p>
+<% } %>
+
+<!-- Back to lesson -->
+<div style="margin-top:var(--fp-space-8);">
+  <a href="/lessons/<%= lesson.id %>" class="btn btn-secondary">
+    Back to <%= lesson.title %>
+  </a>
+</div>

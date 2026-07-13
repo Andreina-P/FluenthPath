@@ -1,0 +1,146 @@
+<!--
+  Registration page.
+  centeredLayout = true.
+
+  WCAG criteria:
+  - 3.3.2: Visible <label> for every input
+  - 3.3.1: Errors identified in text
+  - 3.3.3: Error messages explain the problem and how to fix it
+  - 3.3.7: Redundant entry — already-valid fields are preserved on error
+  - 3.3.8: No CAPTCHA or cognitive function test
+  - 2.5.8: All targets ≥ 44px
+  - 1.4.1: Errors shown with icon + text, never color alone
+-->
+
+<div class="card" style="width:100%;">
+
+  <h1 style="text-align:center; margin-bottom:var(--fp-space-2);">Create Your Account</h1>
+  <p style="text-align:center; color:var(--fp-text-2); font-size:var(--fp-text-sm); margin-bottom:var(--fp-space-6);">
+    Start learning English with practical micro-lessons.
+  </p>
+
+  <!-- Errors -->
+  <% if (errors && errors.length > 0) { %>
+    <div role="alert" class="flash flash--error" style="margin-bottom:var(--fp-space-5);">
+      <svg class="flash__icon" aria-hidden="true" focusable="false" viewBox="0 0 20 20" fill="none">
+        <circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="1.5"/>
+        <path d="M10 6v4M10 13.5v.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      <div>
+        <p style="margin-bottom:0.25rem;"><strong>Please fix the following errors:</strong></p>
+        <ul style="margin:0; padding-left:1.25rem;">
+          <% errors.forEach(err => { %>
+            <li><%= err.msg %></li>
+          <% }) %>
+        </ul>
+      </div>
+    </div>
+  <% } %>
+
+  <form action="/register" method="POST" novalidate>
+
+    <!-- Name -->
+    <div class="form-group">
+      <label for="name" class="form-label form-label--required">Full name</label>
+      <input
+        type="text"
+        id="name"
+        name="name"
+        class="form-input<%= errors && errors.some(e => e.path === 'name') ? ' form-input--error' : '' %>"
+        value="<%= typeof formData !== 'undefined' && formData.name ? formData.name : '' %>"
+        autocomplete="name"
+        required
+        aria-required="true"
+        <% if (errors && errors.some(e => e.path === 'name')) { %>
+          aria-invalid="true"
+          aria-describedby="name-error"
+        <% } %>
+      >
+      <% if (errors && errors.some(e => e.path === 'name')) { %>
+        <p id="name-error" class="form-error"><%= errors.find(e => e.path === 'name').msg %></p>
+      <% } %>
+    </div>
+
+    <!-- Email -->
+    <div class="form-group">
+      <label for="email" class="form-label form-label--required">Email address</label>
+      <input
+        type="email"
+        id="email"
+        name="email"
+        class="form-input<%= errors && errors.some(e => e.path === 'email') ? ' form-input--error' : '' %>"
+        value="<%= typeof formData !== 'undefined' && formData.email ? formData.email : '' %>"
+        autocomplete="email"
+        required
+        aria-required="true"
+        <% if (errors && errors.some(e => e.path === 'email')) { %>
+          aria-invalid="true"
+          aria-describedby="email-error"
+        <% } %>
+      >
+      <% if (errors && errors.some(e => e.path === 'email')) { %>
+        <p id="email-error" class="form-error"><%= errors.find(e => e.path === 'email').msg %></p>
+      <% } %>
+    </div>
+
+    <!-- Password -->
+    <div class="form-group">
+      <label for="password" class="form-label form-label--required">Password</label>
+      <input
+        type="password"
+        id="password"
+        name="password"
+        class="form-input<%= errors && errors.some(e => e.path === 'password') ? ' form-input--error' : '' %>"
+        autocomplete="new-password"
+        required
+        aria-required="true"
+        aria-describedby="password-hint<%= errors && errors.some(e => e.path === 'password') ? ' password-error' : '' %>"
+        <% if (errors && errors.some(e => e.path === 'password')) { %>
+          aria-invalid="true"
+        <% } %>
+      >
+      <!--
+        Hint text linked via aria-describedby — screen readers will read
+        the label first, then this hint when the field is focused.
+      -->
+      <p id="password-hint" class="form-hint">Must be at least 8 characters.</p>
+      <% if (errors && errors.some(e => e.path === 'password')) { %>
+        <p id="password-error" class="form-error"><%= errors.find(e => e.path === 'password').msg %></p>
+      <% } %>
+    </div>
+
+    <!-- Confirm password -->
+    <div class="form-group">
+      <label for="password_confirm" class="form-label form-label--required">Confirm password</label>
+      <input
+        type="password"
+        id="password_confirm"
+        name="password_confirm"
+        class="form-input<%= errors && errors.some(e => e.path === 'password_confirm') ? ' form-input--error' : '' %>"
+        autocomplete="new-password"
+        required
+        aria-required="true"
+        <% if (errors && errors.some(e => e.path === 'password_confirm')) { %>
+          aria-invalid="true"
+          aria-describedby="password-confirm-error"
+        <% } %>
+      >
+      <% if (errors && errors.some(e => e.path === 'password_confirm')) { %>
+        <p id="password-confirm-error" class="form-error">
+          <%= errors.find(e => e.path === 'password_confirm').msg %>
+        </p>
+      <% } %>
+    </div>
+
+    <button type="submit" class="btn btn-primary" style="width:100%; margin-top:var(--fp-space-2);">
+      Sign Up
+    </button>
+
+  </form>
+
+  <p style="text-align:center; margin-top:var(--fp-space-5); font-size:var(--fp-text-sm); color:var(--fp-text-2);">
+    Already have an account?
+    <a href="/login">Log in</a>
+  </p>
+
+</div>

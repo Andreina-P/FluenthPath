@@ -1,0 +1,81 @@
+<!--
+  Assessment timer settings page.
+  WCAG 2.2.1: Time limits must be adjustable.
+  User chooses: no timer, standard (15 min), or extended (30 min).
+  This screen appears BEFORE the test begins.
+-->
+
+<div class="card" style="width:100%;">
+
+  <h1 style="text-align:center; margin-bottom:var(--fp-space-2);">Level Assessment</h1>
+  <p style="text-align:center; color:var(--fp-text-2); font-size:var(--fp-text-sm); margin-bottom:var(--fp-space-6);">
+    A quick test to find your starting level. Choose your timer preference below.
+  </p>
+
+  <form action="/assessment/start" method="POST">
+
+    <!--
+      WCAG 2.2.1: Timer is adjustable — the user picks before starting.
+      fieldset + legend group the options semantically.
+      Native radio buttons — arrow keys navigate between options.
+    -->
+    <fieldset>
+      <legend style="font-size:var(--fp-text-base); font-weight:600; margin-bottom:var(--fp-space-4);">
+        Timer setting
+      </legend>
+
+      <div class="timer-options">
+
+        <!-- No timer (recommended for accessibility) -->
+        <label class="timer-option">
+          <input
+            type="radio"
+            class="timer-option__radio"
+            name="timer"
+            value="none"
+            checked
+          >
+          <div class="timer-option__info">
+            <span class="timer-option__label">No time limit</span>
+            <span class="timer-option__desc">Take as long as you need. Recommended for most users.</span>
+          </div>
+        </label>
+
+        <!-- Standard timer -->
+        <label class="timer-option">
+          <input
+            type="radio"
+            class="timer-option__radio"
+            name="timer"
+            value="standard"
+          >
+          <div class="timer-option__info">
+            <span class="timer-option__label">Standard (15 minutes)</span>
+            <span class="timer-option__desc">A gentle time limit to simulate test conditions.</span>
+          </div>
+        </label>
+
+        <!-- Extended timer -->
+        <label class="timer-option">
+          <input
+            type="radio"
+            class="timer-option__radio"
+            name="timer"
+            value="extended"
+          >
+          <div class="timer-option__info">
+            <span class="timer-option__label">Extended (30 minutes)</span>
+            <span class="timer-option__desc">Double the standard time for extra comfort.</span>
+          </div>
+        </label>
+
+      </div>
+    </fieldset>
+
+    <div style="display:flex; justify-content:center; gap:var(--fp-space-3); margin-top:var(--fp-space-6);">
+      <a href="/dashboard" class="btn btn-secondary">Cancel</a>
+      <button type="submit" class="btn btn-primary">Start Assessment</button>
+    </div>
+
+  </form>
+</div>

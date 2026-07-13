@@ -1,0 +1,118 @@
+<!--
+  Login page.
+  Layout: centeredLayout = true → no sidebar, single column.
+
+  WCAG criteria addressed here:
+  - 3.3.2: Visible <label> for every input (for/id linked)
+  - 3.3.1: Errors identified in text via role="alert"
+  - 3.3.3: Error messages describe what went wrong
+  - 3.3.8: No CAPTCHA — just email + password (accessible authentication)
+  - 3.3.7: Form preserves valid input on error (no redundant entry)
+  - 2.5.8: All interactive targets ≥ 44px tall
+  - 2.4.2: Unique page title set by controller
+  - 1.4.1: Errors shown with icon + text, not color alone
+-->
+
+<div class="card" style="width:100%;">
+
+  <!-- Page heading — unique h1 per page -->
+  <h1 style="text-align:center; margin-bottom:var(--fp-space-2);">Log In</h1>
+  <p style="text-align:center; color:var(--fp-text-2); font-size:var(--fp-text-sm); margin-bottom:var(--fp-space-6);">
+    Welcome back. Enter your email and password to continue.
+  </p>
+
+  <!--
+    Error display.
+    role="alert" makes screen readers announce errors immediately.
+    Each error is a text description — never color-only.
+  -->
+  <% if (errors && errors.length > 0) { %>
+    <div role="alert" class="flash flash--error" style="margin-bottom:var(--fp-space-5);">
+      <svg class="flash__icon" aria-hidden="true" focusable="false" viewBox="0 0 20 20" fill="none">
+        <circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="1.5"/>
+        <path d="M10 6v4M10 13.5v.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      <div>
+        <% if (errors.length === 1) { %>
+          <p style="margin:0;"><%= errors[0].msg %></p>
+        <% } else { %>
+          <p style="margin-bottom:0.25rem;"><strong>Please fix the following errors:</strong></p>
+          <ul style="margin:0; padding-left:1.25rem;">
+            <% errors.forEach(err => { %>
+              <li><%= err.msg %></li>
+            <% }) %>
+          </ul>
+        <% } %>
+      </div>
+    </div>
+  <% } %>
+
+  <!--
+    Login form.
+    method="POST" + action → PRG pattern (controller redirects on success).
+    autocomplete attributes help password managers and screen readers.
+    novalidate: we use server-side validation to guarantee accessible error messages.
+  -->
+  <form action="/login" method="POST" novalidate>
+
+    <!-- Email field -->
+    <div class="form-group">
+      <label for="email" class="form-label">Email address</label>
+      <input
+        type="email"
+        id="email"
+        name="email"
+        class="form-input<%= errors && errors.some(e => e.path === 'email') ? ' form-input--error' : '' %>"
+        value="<%= typeof formData !== 'undefined' && formData.email ? formData.email : '' %>"
+        autocomplete="email"
+        required
+        aria-required="true"
+        <% if (errors && errors.some(e => e.path === 'email')) { %>
+          aria-invalid="true"
+          aria-describedby="email-error"
+        <% } %>
+      >
+      <% if (errors && errors.some(e => e.path === 'email')) { %>
+        <p id="email-error" class="form-error" role="alert">
+          <%= errors.find(e => e.path === 'email').msg %>
+        </p>
+      <% } %>
+    </div>
+
+    <!-- Password field -->
+    <div class="form-group">
+      <label for="password" class="form-label">Password</label>
+      <input
+        type="password"
+        id="password"
+        name="password"
+        class="form-input<%= errors && errors.some(e => e.path === 'password') ? ' form-input--error' : '' %>"
+        autocomplete="current-password"
+        required
+        aria-required="true"
+        <% if (errors && errors.some(e => e.path === 'password')) { %>
+          aria-invalid="true"
+          aria-describedby="password-error"
+        <% } %>
+      >
+      <% if (errors && errors.some(e => e.path === 'password')) { %>
+        <p id="password-error" class="form-error" role="alert">
+          <%= errors.find(e => e.path === 'password').msg %>
+        </p>
+      <% } %>
+    </div>
+
+    <!-- Submit button — WCAG 2.5.8: min 44px height -->
+    <button type="submit" class="btn btn-primary" style="width:100%; margin-top:var(--fp-space-2);">
+      Log In
+    </button>
+
+  </form>
+
+  <!-- Link to register — WCAG 2.4.4: descriptive link text -->
+  <p style="text-align:center; margin-top:var(--fp-space-5); font-size:var(--fp-text-sm); color:var(--fp-text-2);">
+    Don't have an account?
+    <a href="/register">Create one now</a>
+  </p>
+
+</div>

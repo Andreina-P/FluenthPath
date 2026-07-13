@@ -1,0 +1,108 @@
+<!--
+  Listening exercise.
+  WCAG 1.2.1 / 1.2.2: Transcript always available via details/summary.
+  WCAG 1.4.2: Audio does NOT auto-play — user presses play.
+  WCAG 3.3.2: Visible label for the answer input.
+  WCAG 2.1.1: <audio controls> is natively keyboard accessible.
+-->
+
+<% if (lesson) { %>
+  <nav aria-label="Breadcrumb" style="margin-bottom:var(--fp-space-4);">
+    <p style="font-size:var(--fp-text-sm); color:var(--fp-text-2); margin:0;">
+      <a href="/dashboard">Dashboard</a> &rsaquo;
+      <a href="/lessons/<%= lesson.id %>"><%= lesson.title %></a> &rsaquo;
+      <span aria-current="page">Exercise <%= sessionCurrent %></span>
+    </p>
+  </nav>
+<% } %>
+
+<% if (sessionTotal > 0) { %>
+  <div class="session-progress">
+    <div
+      role="progressbar"
+      aria-valuenow="<%= sessionCurrent %>"
+      aria-valuemin="0"
+      aria-valuemax="<%= sessionTotal %>"
+      aria-label="Exercise <%= sessionCurrent %> of <%= sessionTotal %>"
+      class="progress-bar session-progress__bar"
+    >
+      <div class="progress-bar__fill" style="width:<%= Math.round(sessionCurrent / sessionTotal * 100) %>%"></div>
+    </div>
+    <span class="session-progress__label"><%= sessionCurrent %> / <%= sessionTotal %></span>
+  </div>
+<% } %>
+
+<div class="exercise-page">
+
+  <div class="exercise-instruction">
+    <p style="margin:0;"><%= exercise.instruction %></p>
+  </div>
+
+  <p class="exercise-question"><%= exercise.question_text %></p>
+
+  <!-- Audio player — WCAG 1.4.2: no autoplay -->
+  <div class="audio-player">
+    <audio controls aria-label="Exercise audio. Press play to listen.">
+      <source src="<%= exercise.audio_url %>" type="audio/mpeg">
+      Your browser does not support the audio element.
+    </audio>
+  </div>
+
+  <!--
+    WCAG 1.2.1 / 1.2.2: Transcript always available.
+    Using <details>/<summary> — natively accessible with Enter/Space.
+    NVDA announces "collapsed" / "expanded" automatically.
+  -->
+  <% if (exercise.transcript) { %>
+    <details class="transcript">
+      <summary>Show transcript</summary>
+      <p class="transcript__text"><%= exercise.transcript %></p>
+    </details>
+  <% } %>
+
+  <form id="exercise-form" action="/exercises/<%= exercise.id %>/submit" method="POST"
+        style="margin-top:var(--fp-space-5);">
+
+    <div class="form-group">
+      <label for="answer" class="form-label">Your answer</label>
+      <input
+        type="text"
+        id="answer"
+        name="answer"
+        class="form-input"
+        autocomplete="off"
+        aria-describedby="listen-hint"
+      >
+      <p id="listen-hint" class="form-hint">
+        Type exactly what you heard.
+      </p>
+    </div>
+
+    <%- include('../partials/keyboard-hint', { showOptionKeys: false }) %>
+
+    <div class="exercise-actions">
+      <div class="exercise-actions__secondary">
+        <% if (lesson) { %>
+          <a href="/lessons/<%= lesson.id %>" class="btn btn-ghost">Back to lesson</a>
+        <% } %>
+      </div>
+      <div>
+        <button
+          type="submit"
+          id="exercise-submit"
+          class="btn btn-primary btn--inactive"
+          aria-disabled="true"
+          aria-describedby="select-hint"
+        >
+          Check Answer
+        </button>
+        <p id="select-hint" class="select-instruction" tabindex="-1">
+          Type your answer to continue
+        </p>
+      </div>
+    </div>
+
+  </form>
+</div>
+
+<script src="/js/exercise.js" defer></script>

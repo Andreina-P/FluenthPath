@@ -1,0 +1,108 @@
+<!--
+  Multiple choice exercise.
+  WCAG 1.3.1: fieldset + legend for the option group.
+  WCAG 2.1.1: Native radio inputs — arrow keys navigate between options.
+  WCAG 3.3.4: Submit button uses aria-disabled, not disabled.
+  WCAG 4.1.2: aria-describedby links button to hint text.
+  WCAG 2.5.8: All targets >= 44px.
+-->
+
+<!-- Breadcrumb -->
+<% if (lesson) { %>
+  <nav aria-label="Breadcrumb" style="margin-bottom:var(--fp-space-4);">
+    <p style="font-size:var(--fp-text-sm); color:var(--fp-text-2); margin:0;">
+      <a href="/dashboard">Dashboard</a> &rsaquo;
+      <a href="/lessons/<%= lesson.id %>"><%= lesson.title %></a> &rsaquo;
+      <span aria-current="page">Exercise <%= sessionCurrent %></span>
+    </p>
+  </nav>
+<% } %>
+
+<!-- Session progress -->
+<% if (sessionTotal > 0) { %>
+  <div class="session-progress">
+    <div
+      role="progressbar"
+      aria-valuenow="<%= sessionCurrent %>"
+      aria-valuemin="0"
+      aria-valuemax="<%= sessionTotal %>"
+      aria-label="Exercise <%= sessionCurrent %> of <%= sessionTotal %>"
+      class="progress-bar session-progress__bar"
+    >
+      <div class="progress-bar__fill" style="width:<%= Math.round(sessionCurrent / sessionTotal * 100) %>%"></div>
+    </div>
+    <span class="session-progress__label"><%= sessionCurrent %> / <%= sessionTotal %></span>
+  </div>
+<% } %>
+
+<div class="exercise-page">
+
+  <!-- Instruction -->
+  <div class="exercise-instruction">
+    <p style="margin:0;"><%= exercise.instruction %></p>
+  </div>
+
+  <!-- Exercise form -->
+  <form id="exercise-form" action="/exercises/<%= exercise.id %>/submit" method="POST">
+
+    <!--
+      fieldset groups the radio buttons.
+      legend IS the question — screen readers announce it
+      before each option in the group.
+    -->
+    <fieldset>
+      <legend class="exercise-question"><%= exercise.question_text %></legend>
+
+      <% exercise.options.forEach(opt => { %>
+        <div class="option">
+          <label class="option__label" for="opt-<%= opt.label %>">
+            <input
+              type="radio"
+              class="option__radio"
+              id="opt-<%= opt.label %>"
+              name="answer"
+              value="<%= opt.text %>"
+            >
+            <span class="option__key" aria-hidden="true"><%= opt.label %></span>
+            <span><%= opt.text %></span>
+          </label>
+        </div>
+      <% }) %>
+    </fieldset>
+
+    <!-- Keyboard hint -->
+    <%- include('../partials/keyboard-hint', { showOptionKeys: true }) %>
+
+    <!-- Actions -->
+    <div class="exercise-actions">
+      <div class="exercise-actions__secondary">
+        <% if (lesson) { %>
+          <a href="/lessons/<%= lesson.id %>" class="btn btn-ghost">Back to lesson</a>
+        <% } %>
+      </div>
+
+      <div>
+        <!--
+          WCAG 3.3.4: aria-disabled keeps the button in Tab order.
+          NVDA announces "Check answer, button, dimmed".
+          exercise.js removes aria-disabled when a radio is selected.
+        -->
+        <button
+          type="submit"
+          id="exercise-submit"
+          class="btn btn-primary btn--inactive"
+          aria-disabled="true"
+          aria-describedby="select-hint"
+        >
+          Check Answer
+        </button>
+        <p id="select-hint" class="select-instruction" tabindex="-1">
+          Select an option to continue
+        </p>
+      </div>
+    </div>
+
+  </form>
+</div>
+
+<script src="/js/exercise.js" defer></script>

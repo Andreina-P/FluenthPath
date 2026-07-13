@@ -1,0 +1,101 @@
+/* ============================================================
+   FluentPath — animations.css
+   WCAG 2.3.1: No content flashes more than 3 times per second.
+   All transitions are smooth and below the seizure threshold.
+   ============================================================ */
+
+:root {
+  --fp-dur-fast:  100ms;
+  --fp-dur-base:  200ms;
+  --fp-dur-slow:  300ms;
+  --fp-ease:      cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* --- Buttons ----------------------------------------------- */
+.btn {
+  transition:
+    background-color var(--fp-dur-fast) var(--fp-ease),
+    border-color     var(--fp-dur-fast) var(--fp-ease),
+    color            var(--fp-dur-fast) var(--fp-ease),
+    box-shadow       var(--fp-dur-fast) var(--fp-ease),
+    transform        var(--fp-dur-fast) var(--fp-ease);
+}
+
+.btn:active:not([disabled]):not([aria-disabled="true"]) {
+  transform: translateY(1px);
+}
+
+/* --- Nav links --------------------------------------------- */
+.site-nav__link {
+  transition:
+    background-color var(--fp-dur-fast) var(--fp-ease),
+    color            var(--fp-dur-fast) var(--fp-ease);
+}
+
+/* --- Exercise option rows ---------------------------------- */
+.option__label {
+  transition:
+    background-color var(--fp-dur-fast) var(--fp-ease),
+    border-color     var(--fp-dur-fast) var(--fp-ease);
+}
+
+/* --- Progress bar fill ------------------------------------ */
+.progress-bar__fill {
+  transition: width var(--fp-dur-slow) var(--fp-ease);
+}
+
+/* --- Cards ------------------------------------------------- */
+.card,
+.lesson-item {
+  transition: box-shadow var(--fp-dur-base) var(--fp-ease),
+              border-color var(--fp-dur-fast) var(--fp-ease);
+}
+
+.lesson-item:hover {
+  box-shadow: var(--fp-shadow);
+}
+
+/* --- Flash messages ---------------------------------------- */
+.flash {
+  animation: flash-slide-in var(--fp-dur-base) var(--fp-ease) both;
+}
+
+@keyframes flash-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* --- Word bank buttons ------------------------------------- */
+.word-bank__btn {
+  transition:
+    background-color var(--fp-dur-fast) var(--fp-ease),
+    border-color     var(--fp-dur-fast) var(--fp-ease),
+    opacity          var(--fp-dur-fast) var(--fp-ease);
+}
+
+/* ============================================================
+   WCAG 2.3.1 + User preference: prefers-reduced-motion
+   Disable ALL animations and transitions for users who
+   have requested reduced motion in their OS settings.
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration:        0.01ms !important;
+    animation-iteration-count: 1      !important;
+    transition-duration:       0.01ms !important;
+    scroll-behavior:           auto   !important;
+  }
+
+  /* Instantly show flash messages for reduced-motion users */
+  .flash {
+    animation: none;
+  }
+}

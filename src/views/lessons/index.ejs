@@ -1,0 +1,59 @@
+<!--
+  Lessons list page — grouped by level.
+  WCAG 2.4.4: Every lesson link has descriptive text (lesson title).
+  WCAG 4.1.2: Progress bars have full ARIA attributes.
+  WCAG 2.4.6: Each level is a heading that describes the section.
+-->
+
+<h1>Lessons</h1>
+<p style="color:var(--fp-text-2); margin-bottom:var(--fp-space-6);">
+  Choose a lesson to start practicing. Each lesson contains exercises and vocabulary.
+</p>
+
+<%
+  const levelLabels = {
+    beginner:       'Beginner',
+    elementary:     'Elementary',
+    conversational: 'Conversational',
+  };
+%>
+
+<% if (grouped && Object.keys(grouped).length > 0) { %>
+  <% for (const [level, lessons] of Object.entries(grouped)) { %>
+    <section aria-labelledby="level-<%= level %>" style="margin-bottom:var(--fp-space-8);">
+      <h2 id="level-<%= level %>"><%= levelLabels[level] || level %></h2>
+
+      <div style="display:flex; flex-direction:column; gap:var(--fp-space-3);">
+        <% lessons.forEach(lesson => { %>
+
+          <a href="/lessons/<%= lesson.id %>" class="lesson-item">
+            <div>
+              <p class="lesson-item__title"><%= lesson.title %></p>
+              <p class="lesson-item__meta">
+                <%= lesson.description %>
+                — <%= lesson.completedExercises %> of <%= lesson.totalExercises %> exercises completed
+              </p>
+            </div>
+            <div style="min-width:80px; text-align:right;">
+              <div
+                role="progressbar"
+                aria-valuenow="<%= lesson.progressPct %>"
+                aria-valuemin="0"
+                aria-valuemax="100"
+                aria-label="<%= lesson.title %>: <%= lesson.progressPct %> percent complete"
+                class="progress-bar"
+                style="width:80px;"
+              >
+                <div class="progress-bar__fill" style="width:<%= lesson.progressPct %>%"></div>
+              </div>
+              <span style="font-size:var(--fp-text-xs); color:var(--fp-text-2);"><%= lesson.progressPct %>%</span>
+            </div>
+          </a>
+
+        <% }) %>
+      </div>
+    </section>
+  <% } %>
+<% } else { %>
+  <p>No lessons available yet. Check back soon.</p>
+<% } %>

@@ -1,0 +1,94 @@
+/* ============================================================
+   FluentPath — focus.css
+   🔒 PROTECTED — LOAD LAST — DO NOT MODIFY OR OVERRIDE
+
+   This file enforces WCAG 2.4.7 (Focus Visible) and
+   WCAG 2.4.11 (Focus Not Obscured).
+
+   Rule: outline:none is ONLY permitted on the bare *:focus
+   selector below because it is immediately replaced by the
+   *:focus-visible rule that follows. It must never appear
+   anywhere else in the codebase.
+   ============================================================ */
+
+/* Remove browser default (replaced by :focus-visible below) */
+*:focus {
+  outline: none;
+}
+
+/* ── Global focus ring ─────────────────────────────────────── */
+/* Applies to all interactive elements when navigating by keyboard */
+*:focus-visible {
+  outline: 3px solid var(--fp-border-focus);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* ── Buttons and links: tighter offset ─────────────────────── */
+a:focus-visible,
+button:focus-visible,
+[role="button"]:focus-visible {
+  outline: 3px solid var(--fp-border-focus);
+  outline-offset: 2px;
+  border-radius: var(--fp-radius-sm);
+}
+
+/* ── Form inputs ───────────────────────────────────────────── */
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 3px solid var(--fp-border-focus);
+  outline-offset: 0;
+  border-color: var(--fp-border-focus);
+  box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.2);
+  border-radius: var(--fp-radius);
+}
+
+/* ── Radio and checkbox ────────────────────────────────────── */
+input[type="radio"]:focus-visible,
+input[type="checkbox"]:focus-visible {
+  outline: 3px solid var(--fp-border-focus);
+  outline-offset: 2px;
+}
+
+/* ── Skip link: most prominent focus state on the page ─────── */
+/* WCAG 2.4.1: Skip link must be visually obvious when focused  */
+.skip-link:focus-visible {
+  position: fixed !important;
+  top: 1rem !important;
+  left: 1rem !important;
+  z-index: 9999 !important;
+  clip: auto !important;
+  width: auto !important;
+  height: auto !important;
+  overflow: visible !important;
+  white-space: nowrap !important;
+
+  background: var(--fp-surface);
+  color: var(--fp-primary);
+  padding: var(--fp-space-3) var(--fp-space-6);
+  border-radius: var(--fp-radius);
+  font-weight: 700;
+  font-size: var(--fp-text-sm);
+  text-decoration: none;
+  border: 2px solid var(--fp-border-focus);
+  box-shadow: var(--fp-shadow-md);
+
+  outline: none; /* Visual treatment replaces outline here */
+}
+
+/* ── Word bank buttons: exercise-specific focus ────────────── */
+.word-bank__btn:focus-visible {
+  outline: 3px solid var(--fp-border-focus);
+  outline-offset: 2px;
+  border-radius: var(--fp-radius-sm);
+  background: var(--fp-primary-light);
+}
+
+/* ── Exercise option rows (radio labels) ───────────────────── */
+.option__label:focus-within {
+  outline: 2px solid var(--fp-border-focus);
+  outline-offset: 2px;
+  border-radius: var(--fp-radius);
+  background: var(--fp-primary-light);
+}

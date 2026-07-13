@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!--
+    WCAG 2.4.2: Unique, descriptive page title.
+    Each controller sets res.locals.pageTitle before rendering.
+    Format: "Page Name — FluentPath"
+  -->
+  <title><%= typeof pageTitle !== 'undefined' && pageTitle ? pageTitle + ' — ' : '' %>FluentPath</title>
+
+  <!--
+    CSS load order is mandatory — focus.css ALWAYS last.
+    See focus.css header comment for explanation.
+  -->
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/layout.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/exercises.css">
+  <link rel="stylesheet" href="/css/animations.css">
+  <link rel="stylesheet" href="/css/focus.css"><!-- 🔒 ALWAYS LAST -->
+</head>
+<body>
+
+  <!--
+    WCAG 2.4.1 — Bypass blocks.
+    First focusable element on every page.
+    Visible only on :focus-visible (see focus.css).
+  -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!--
+    WCAG 4.1.3 — Status messages.
+    Always present in the DOM, always empty on page load.
+    JavaScript fills this to announce dynamic changes
+    (exercise feedback, score updates, errors) without moving focus.
+    role="status" + aria-live="polite" = announced after current speech.
+    aria-atomic="true" = announces the full message, not just the change.
+  -->
+  <div
+    id="live-region"
+    role="status"
+    aria-live="polite"
+    aria-atomic="true"
+    class="sr-only"
+  ></div>
+
+  <!-- Site header with navigation -->
+  <%- include('../partials/header') %>
+
+  <!--
+    Page layout.
+    centeredLayout = true → single-column centered (login, register, assessment).
+    Default → two-column with sidebar on the left (via CSS order).
+
+    DOM order: main BEFORE sidebar — correct for screen readers.
+    Visual order: sidebar LEFT, main RIGHT — via CSS flex order property.
+  -->
+  <% if (typeof centeredLayout !== 'undefined' && centeredLayout) { %>
+
+    <div class="page-layout page-layout--centered">
+      <main id="main-content" tabindex="-1">
+        <%- include('../partials/flash') %>
+        <%- body %>
+      </main>
+    </div>
+
+  <% } else { %>
+
+    <div class="page-layout">
+      <!--
+        main comes FIRST in DOM → screen reader reads main content first.
+        CSS gives it order:2 → visually on the RIGHT.
+      -->
+      <main id="main-content" tabindex="-1">
+        <%- include('../partials/flash') %>
+        <%- body %>
+      </main>
+
+      <!--
+        Sidebar comes SECOND in DOM → screen reader reads it second.
+        CSS gives it order:1 → visually on the LEFT.
+        showSidebar is set to false on pages that don't need it.
+      -->
+      <% if (typeof showSidebar === 'undefined' || showSidebar) { %>
+        <%- include('../partials/sidebar') %>
+      <% } %>
+    </div>
+
+  <% } %>
+
+  <!-- Site footer -->
+  <footer class="site-footer" role="contentinfo">
+    <p>FluentPath &copy; 2026 &mdash; Escuela Politécnica Nacional</p>
+  </footer>
+
+  <!--
+    JavaScript — loaded with defer so it doesn't block rendering.
+    Only the files needed on every page are loaded here.
+    Exercise-specific JS is loaded in the exercise views.
+  -->
+  <script src="/js/focus-manager.js" defer></script>
+  <script src="/js/live-region.js" defer></script>
+
+</body>
+</html>
