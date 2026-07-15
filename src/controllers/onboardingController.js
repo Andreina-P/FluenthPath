@@ -7,12 +7,12 @@ const onboardingController = {
   step(req, res, next) {
     const stepNum = parseInt(req.params.step);
 
-    if (isNaN(stepNum) || stepNum < 1 || stepNum > 3) {
+    if (isNaN(stepNum) || stepNum < 1 || stepNum > 5) {
       return res.redirect('/onboarding/1');
     }
 
     res.render(`onboarding/step-${stepNum}`, {
-      pageTitle:      `Welcome to FluentPath — Step ${stepNum} of 3`,
+      pageTitle:      `Welcome to FluentPath — Step ${stepNum} of 5`,
       currentPage:    null,
       showSidebar:    false,
       centeredLayout: true,

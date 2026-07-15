@@ -1,5 +1,5 @@
 <!--
-  Onboarding step 3: Immediate feedback.
+  Onboarding step 4: Your learning path.
   WCAG 2.4.2: Unique title set in controller.
   WCAG 2.1.2: No focus trap — página real.
 -->
@@ -8,21 +8,21 @@
 
   <div
     role="progressbar"
-    aria-valuenow="3"
+    aria-valuenow="4"
     aria-valuemin="1"
     aria-valuemax="5"
-    aria-label="Step 3 of 5"
+    aria-label="Step 4 of 5"
     style="margin-bottom:var(--fp-space-5);"
   >
-    <p style="font-size:var(--fp-text-xs); color:var(--fp-text-2); margin-bottom:var(--fp-space-2);">3 / 5</p>
+    <p style="font-size:var(--fp-text-xs); color:var(--fp-text-2); margin-bottom:var(--fp-space-2);">4 / 5</p>
     <div class="progress-bar" style="max-width:200px; margin:0 auto;">
-      <div class="progress-bar__fill" style="width:60%"></div>
+      <div class="progress-bar__fill" style="width:80%"></div>
     </div>
   </div>
 
-  <h1 style="color:var(--fp-primary); margin-bottom:var(--fp-space-3);">Immediate Feedback</h1>
+  <h1 style="color:var(--fp-primary); margin-bottom:var(--fp-space-3);">Your Learning Path</h1>
   <p style="color:var(--fp-text-2); margin-bottom:var(--fp-space-6);">
-    Get clear guidance after each answer to accelerate your learning.
+    Personalized path and clear progress. We adapt as you learn.
   </p>
 
   <div class="card" style="background:var(--fp-bg); text-align:left; margin-bottom:var(--fp-space-6);">
@@ -30,30 +30,30 @@
       <li style="display:flex; align-items:flex-start; gap:var(--fp-space-3);">
         <span aria-hidden="true" style="color:var(--fp-success); font-size:var(--fp-text-lg); line-height:1;">&#10003;</span>
         <div>
-          <strong>Correct or incorrect shown clearly</strong>
-          <p style="font-size:var(--fp-text-sm); color:var(--fp-text-2); margin:0;">You always know right away if your answer was right.</p>
+          <strong>Adaptive level assessment</strong>
+          <p style="font-size:var(--fp-text-sm); color:var(--fp-text-2); margin:0;">A quick test places you at the right starting level.</p>
         </div>
       </li>
       <li style="display:flex; align-items:flex-start; gap:var(--fp-space-3);">
         <span aria-hidden="true" style="color:var(--fp-success); font-size:var(--fp-text-lg); line-height:1;">&#10003;</span>
         <div>
-          <strong>See the correct answer and a quick tip</strong>
-          <p style="font-size:var(--fp-text-sm); color:var(--fp-text-2); margin:0;">Every exercise ends with the right answer and a grammar note.</p>
+          <strong>Track streaks and skill bars</strong>
+          <p style="font-size:var(--fp-text-sm); color:var(--fp-text-2); margin:0;">See your daily streak and progress across all skill areas.</p>
         </div>
       </li>
       <li style="display:flex; align-items:flex-start; gap:var(--fp-space-3);">
         <span aria-hidden="true" style="color:var(--fp-success); font-size:var(--fp-text-lg); line-height:1;">&#10003;</span>
         <div>
-          <strong>Earn points to track progress</strong>
-          <p style="font-size:var(--fp-text-sm); color:var(--fp-text-2); margin:0;">Get XP for every exercise, whether you get it right or not.</p>
+          <strong>Recommended next lesson</strong>
+          <p style="font-size:var(--fp-text-sm); color:var(--fp-text-2); margin:0;">Your dashboard always shows the best next step for you.</p>
         </div>
       </li>
     </ul>
   </div>
 
   <div style="display:flex; justify-content:center; align-items:center; gap:var(--fp-space-4);">
-    <a href="/onboarding/2" class="btn btn-ghost" style="font-size:var(--fp-text-sm);">Back</a>
-    <a href="/onboarding/4" class="btn btn-primary">Next</a>
+    <a href="/onboarding/3" class="btn btn-ghost" style="font-size:var(--fp-text-sm);">Back</a>
+    <a href="/onboarding/5" class="btn btn-primary">Next</a>
     <form action="/onboarding/complete" method="POST" style="display:inline;">
       <button type="submit" class="btn btn-ghost" style="font-size:var(--fp-text-sm);">Skip</button>
     </form>

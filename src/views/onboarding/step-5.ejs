@@ -1,0 +1,59 @@
+<!--
+  Onboarding step 5: Ready to start.
+  WCAG 2.4.2: Unique title set in controller.
+  WCAG 2.1.2: No focus trap — página real.
+-->
+
+<div class="card" style="width:100%; text-align:center;">
+
+  <div
+    role="progressbar"
+    aria-valuenow="5"
+    aria-valuemin="1"
+    aria-valuemax="5"
+    aria-label="Step 5 of 5"
+    style="margin-bottom:var(--fp-space-5);"
+  >
+    <p style="font-size:var(--fp-text-xs); color:var(--fp-text-2); margin-bottom:var(--fp-space-2);">5 / 5</p>
+    <div class="progress-bar" style="max-width:200px; margin:0 auto;">
+      <div class="progress-bar__fill" style="width:100%"></div>
+    </div>
+  </div>
+
+  <h1 style="color:var(--fp-primary); margin-bottom:var(--fp-space-3);">Ready to Start?</h1>
+  <p style="color:var(--fp-text-2); margin-bottom:var(--fp-space-6);">
+    Take a 5-minute assessment or jump straight into your first lesson.
+  </p>
+
+  <div class="card" style="background:var(--fp-bg); text-align:left; margin-bottom:var(--fp-space-6);">
+    <ul style="list-style:none; display:flex; flex-direction:column; gap:var(--fp-space-4);">
+      <li style="display:flex; align-items:flex-start; gap:var(--fp-space-3);">
+        <span aria-hidden="true" style="color:var(--fp-success); font-size:var(--fp-text-lg); line-height:1;">&#10003;</span>
+        <div>
+          <strong>Assessment tailors your path to your current skill level</strong>
+          <p style="font-size:var(--fp-text-sm); color:var(--fp-text-2); margin:0;">Get placed automatically so you start at the right level.</p>
+        </div>
+      </li>
+      <li style="display:flex; align-items:flex-start; gap:var(--fp-space-3);">
+        <span aria-hidden="true" style="color:var(--fp-success); font-size:var(--fp-text-lg); line-height:1;">&#10003;</span>
+        <div>
+          <strong>Start a lesson in under 3 minutes</strong>
+          <p style="font-size:var(--fp-text-sm); color:var(--fp-text-2); margin:0;">No setup needed — pick a lesson and go.</p>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <div style="display:flex; flex-direction:column; align-items:center; gap:var(--fp-space-3); margin-bottom:var(--fp-space-4);">
+    <form action="/onboarding/complete" method="POST" style="display:inline;">
+      <button type="submit" class="btn btn-primary">Get Started</button>
+    </form>
+    <a href="/assessment" class="btn btn-secondary">Take quick assessment</a>
+  </div>
+
+  <div style="display:flex; justify-content:center; align-items:center; gap:var(--fp-space-4);">
+    <a href="/onboarding/4" class="btn btn-ghost" style="font-size:var(--fp-text-sm);">Back</a>
+    <a href="/onboarding/1" class="btn btn-ghost" style="font-size:var(--fp-text-sm);">Repeat Tour</a>
+  </div>
+
+</div>
