@@ -12,6 +12,7 @@ const viewMap = {
   listening:       'exercises/listening',
   word_bank:       'exercises/word-bank',
   speaking:        'exercises/speaking',
+  reading:         'exercises/reading',
 };
 
 const exerciseController = {
@@ -88,11 +89,11 @@ const exerciseController = {
         return next(err);
       }
 
-      const userAnswer = (req.body.answer || '').trim().toLowerCase();
-      const correct    = exercise.correct_answer.trim().toLowerCase();
+      const userAnswer = (req.body.answer || '').trim().toLowerCase().replace(/[^a-z0-9 ]/g, '').replace(/ +/g, ' ');
+      const correct    = exercise.correct_answer.trim().toLowerCase().replace(/[^a-z0-9 ]/g, '').replace(/  +/g, ' ');
 
       // Speaking exercises are always marked as completed
-      const isCorrect = exercise.type === 'speaking'
+      const isCorrect = (exercise.type === 'speaking' || exercise.type === 'reading')
         ? true
         : userAnswer === correct;
 

@@ -38,6 +38,26 @@
 <div class="exercise-page">
 
   <!-- Instruction -->
+  <!-- Audio player for listening-cloze exercises (skill=listening) -->
+  <% if (exercise.audio_url) { %>
+    <div class="audio-player" style="margin-bottom:var(--fp-space-4);">
+      <p style="font-size:var(--fp-text-sm); color:var(--fp-text-2); margin-bottom:var(--fp-space-2);">
+        Listen to the audio, then answer the question below:
+      </p>
+      <audio controls aria-label="Exercise audio. Listen carefully before choosing your answer.">
+        <source src="<%= exercise.audio_url %>" type="audio/mpeg">
+        Your browser does not support the audio element.
+      </audio>
+    </div>
+    <% if (exercise.transcript) { %>
+      <details class="transcript" style="margin-bottom:var(--fp-space-4);">
+        <summary>Show transcript</summary>
+        <p class="transcript__text"><%= exercise.transcript %></p>
+      </details>
+    <% } %>
+  <% } %>
+
+  <!-- Instruction -->
   <div class="exercise-instruction">
     <p style="margin:0;"><%= exercise.instruction %></p>
   </div>

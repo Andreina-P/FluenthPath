@@ -1,0 +1,98 @@
+<!--
+  Reading exercise — story text + optional audio support.
+  No evaluation — user marks as completed with "I finished reading" button.
+  WCAG 1.4.2: Audio does not auto-play.
+  WCAG 1.2.1: Audio transcript is the reading text itself.
+  WCAG 2.1.1: Single button to complete — fully keyboard native.
+  WCAG 1.4.12: Text spacing can be overridden by user without breaking layout.
+-->
+
+<% if (lesson) { %>
+  <nav aria-label="Breadcrumb" style="margin-bottom:var(--fp-space-4);">
+    <p style="font-size:var(--fp-text-sm); color:var(--fp-text-2); margin:0;">
+      <a href="/dashboard">Dashboard</a> &rsaquo;
+      <a href="/lessons/<%= lesson.id %>"><%= lesson.title %></a> &rsaquo;
+      <span aria-current="page">Exercise <%= sessionCurrent %></span>
+    </p>
+  </nav>
+<% } %>
+
+<% if (sessionTotal > 0) { %>
+  <div class="session-progress">
+    <div
+      role="progressbar"
+      aria-valuenow="<%= sessionCurrent %>"
+      aria-valuemin="0"
+      aria-valuemax="<%= sessionTotal %>"
+      aria-label="Exercise <%= sessionCurrent %> of <%= sessionTotal %>"
+      class="progress-bar session-progress__bar"
+    >
+      <div class="progress-bar__fill" style="width:<%= Math.round(sessionCurrent / sessionTotal * 100) %>%"></div>
+    </div>
+    <span class="session-progress__label"><%= sessionCurrent %> / <%= sessionTotal %></span>
+  </div>
+<% } %>
+
+<div class="exercise-page">
+
+  <div class="exercise-instruction">
+    <p style="margin:0;"><%= exercise.instruction %></p>
+  </div>
+
+  <!-- Story title -->
+  <h2 style="font-size:var(--fp-text-xl); margin-bottom:var(--fp-space-4);"><%= exercise.question_text %></h2>
+
+  <!-- Audio support (optional — does not auto-play) -->
+  <% if (exercise.audio_url) { %>
+    <div class="audio-player" style="margin-bottom:var(--fp-space-4);">
+      <p style="font-size:var(--fp-text-sm); color:var(--fp-text-2); margin-bottom:var(--fp-space-2);">
+        Listen along while you read (optional):
+      </p>
+      <audio controls aria-label="Audio version of the story. You can listen while you read.">
+        <source src="<%= exercise.audio_url %>" type="audio/mpeg">
+        Your browser does not support the audio element.
+      </audio>
+    </div>
+  <% } %>
+
+  <!-- Reading passage -->
+  <% if (exercise.reading_text) { %>
+    <article
+      class="card reading-passage"
+      aria-label="Reading passage: <%= exercise.question_text %>"
+      style="padding:var(--fp-space-6); margin-bottom:var(--fp-space-5); line-height:1.8; font-size:var(--fp-text-base);"
+    >
+      <%- exercise.reading_text.replace(/\n\n/g, '</p><p style="margin-bottom:var(--fp-space-4);">').replace(/^/, '<p style="margin-bottom:var(--fp-space-4);">').replace(/$/, '</p>') %>
+    </article>
+  <% } %>
+
+  <!-- Pro-tip about what to notice -->
+  <% if (exercise.pro_tip) { %>
+    <div class="pro-tip" style="margin-bottom:var(--fp-space-5);">
+      <p class="pro-tip__label">What to notice</p>
+      <p style="margin:0;"><%= exercise.pro_tip %></p>
+    </div>
+  <% } %>
+
+  <!-- Completion button -->
+  <div class="card" style="text-align:center; padding:var(--fp-space-5);">
+    <p style="color:var(--fp-text-2); margin-bottom:var(--fp-space-4); font-size:var(--fp-text-sm);">
+      When you have finished reading, press the button below to mark this exercise as complete.
+    </p>
+    <form action="/exercises/<%= exercise.id %>/submit" method="POST">
+      <input type="hidden" name="answer" value="read">
+      <button type="submit" class="btn btn-primary" style="min-width:200px;">
+        I finished reading
+      </button>
+    </form>
+  </div>
+
+  <div class="exercise-actions" style="border-top:none; margin-top:var(--fp-space-4);">
+    <div class="exercise-actions__secondary">
+      <% if (lesson) { %>
+        <a href="/lessons/<%= lesson.id %>" class="btn btn-ghost">Back to lesson</a>
+      <% } %>
+    </div>
+  </div>
+
+</div>

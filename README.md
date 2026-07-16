@@ -143,6 +143,7 @@ psql -U postgres -d fluentpath -f database/migrations/003_create_exercises.sql
 psql -U postgres -d fluentpath -f database/migrations/004_create_user_progress.sql
 psql -U postgres -d fluentpath -f database/migrations/005_create_user_stats.sql
 psql -U postgres -d fluentpath -f database/migrations/006_create_vocabulary.sql
+psql -U postgres -d fluentpath -f database/migrations/007_add_skill_and_reading.sql
 ```
 
 ### 3. Cargar los datos semilla
@@ -150,6 +151,7 @@ psql -U postgres -d fluentpath -f database/migrations/006_create_vocabulary.sql
 ```bash
 psql -U postgres -d fluentpath -f database/seeds/001_all_seeds.sql
 psql -U postgres -d fluentpath -f database/seeds/002_vocabulary_and_speaking.sql
+psql -U postgres -d fluentpath -f database/seeds/003_reading_and_listening_cloze.sql
 ```
 
 Esto carga 4 lecciones, 12 ejercicios (2 de cada tipo: multiple choice, translate, listening, word bank, speaking, más 2 de assessment) y 13 tarjetas de vocabulario.
@@ -229,6 +231,10 @@ El proyecto referencia 4 archivos de audio que **vienen incluidos(pero son incor
 | `ex-listening-02.mp3` | Lección 3, ejercicio 2 | "She was studying English when the phone rang." |
 | `ex-speaking-01.mp3` | Lección 1, ejercicio 3 | "Good morning! How are you today?" |
 | `ex-speaking-02.mp3` | Lección 1, ejercicio 4 | "Nice to meet you. My name is Alex." |
+| `ex-reading-01.mp3` | --- | --- |
+| `ex-reading-02.mp3` | --- | --- |
+| `ex-listening-cloze-01.mp3` | --- | --- |
+| `ex-listening-cloze-02.mp3` | --- | --- |
 
 Pueden grabarse manualmente o generarse con cualquier herramienta de texto a voz (TTS) en inglés. Sin estos archivos, los ejercicios de tipo `listening` y `speaking` mostrarán el reproductor de audio vacío, pero el resto de la aplicación funciona con normalidad.
 

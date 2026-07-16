@@ -13,6 +13,7 @@ const exerciseRoutes    = require('./exerciseRoutes');
 const assessmentRoutes  = require('./assessmentRoutes');
 const progressRoutes    = require('./progressRoutes');
 const onboardingRoutes  = require('./onboardingRoutes');
+const helpRoutes        = require('./helpRoutes');
 
 router.use('/dashboard',  requireAuth, dashboardRoutes);
 router.use('/lessons',    requireAuth, lessonRoutes);
@@ -20,6 +21,7 @@ router.use('/exercises',  requireAuth, exerciseRoutes);
 router.use('/assessment', requireAuth, assessmentRoutes);
 router.use('/progress',   requireAuth, progressRoutes);
 router.use('/onboarding', requireAuth, onboardingRoutes);
+router.use('/help',       requireAuth, helpRoutes);
 
 /* ── Root redirect ───────────────────────────────────── */
 router.get('/', (req, res) => {
