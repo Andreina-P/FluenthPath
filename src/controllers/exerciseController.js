@@ -89,8 +89,8 @@ const exerciseController = {
         return next(err);
       }
 
-      const userAnswer = (req.body.answer || '').trim().toLowerCase().replace(/[^a-z0-9 ]/g, '').replace(/ +/g, ' ');
-      const correct    = exercise.correct_answer.trim().toLowerCase().replace(/[^a-z0-9 ]/g, '').replace(/  +/g, ' ');
+      const userAnswer = (req.body.answer || '').trim().toLowerCase().replace(/[^\p{L}\p{N} ]/gu, '').replace(/ +/g, ' ');
+      const correct    = (exercise.correct_answer || '').trim().toLowerCase().replace(/[^\p{L}\p{N} ]/gu, '').replace(/ +/g, ' ');
 
       // Speaking exercises are always marked as completed
       const isCorrect = (exercise.type === 'speaking' || exercise.type === 'reading')

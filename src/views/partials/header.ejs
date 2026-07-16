@@ -12,9 +12,9 @@
 
     <!-- Logo / Home link -->
     <a
-      href="<%= user ? '/dashboard' : '/' %>"
+      href="<%= locals.user ? '/dashboard' : '/' %>"
       class="site-logo"
-      aria-label="FluentPath, go to <%= user ? 'dashboard' : 'home' %>"
+      aria-label="FluentPath, go to <%= locals.user ? 'dashboard' : 'home' %>"
     >
       <svg aria-hidden="true" focusable="false" width="28" height="28" viewBox="0 0 28 28" fill="none">
         <rect width="28" height="28" rx="6" fill="#1D4ED8"/>
@@ -23,7 +23,7 @@
       <span>FluentPath</span>
     </a>
 
-    <% if (user) { %>
+    <% if (locals.user) { %>
       <!--
         Primary navigation — only shown when authenticated.
         aria-current="page" set on the active link for screen readers.
@@ -69,7 +69,7 @@
         </svg>
       </a>
 
-      <% if (user) { %>
+      <% if (locals.user) { %>
         <!--
           Sign Out — POST to /logout (not GET) to prevent
           accidental logout from browser prefetching.
