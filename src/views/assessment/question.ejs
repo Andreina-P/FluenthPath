@@ -100,3 +100,32 @@
 </div>
 
 <script src="/js/exercise.js" defer></script>
+<% if (timerEnabled && remainingSeconds !== null) { %>
+<script>
+(function() {
+  var remaining = <%= remainingSeconds %>;
+  var timerEl = document.querySelector('.assessment-timer span');
+  if (!timerEl || remaining <= 0) return;
+
+  var interval = setInterval(function() {
+    remaining--;
+    if (remaining <= 0) {
+      clearInterval(interval);
+      // Auto-submit when time runs out
+      var form = document.getElementById('exercise-form');
+      if (form) form.submit();
+      return;
+    }
+    var m = Math.floor(remaining / 60);
+    var s = remaining % 60;
+    timerEl.textContent = m + ':' + (s < 10 ? '0' : '') + s;
+
+    // Warning state below 2 minutes
+    var wrapper = document.querySelector('.assessment-timer');
+    if (remaining < 120 && wrapper) {
+      wrapper.classList.add('assessment-timer--warning');
+    }
+  }, 1000);
+})();
+</script>
+<% } %>

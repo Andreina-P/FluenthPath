@@ -28,6 +28,28 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
   }
+  /* ── Keyboard shortcuts A/B/C/D for multiple choice ──── */
+  /* Only active when radios exist (not in text input exercises) */
+  if (radios.length > 0) {
+    document.addEventListener('keydown', (e) => {
+      // Do not intercept if user is typing in a text input or textarea
+      const tag = document.activeElement.tagName.toLowerCase();
+      if (tag === 'input' && document.activeElement.type === 'text') return;
+      if (tag === 'textarea') return;
+
+      const keyMap = { 'a': 0, 'b': 1, 'c': 2, 'd': 3 };
+      const key = e.key.toLowerCase();
+
+      if (key in keyMap && keyMap[key] < radios.length) {
+        e.preventDefault();
+        const radio = radios[keyMap[key]];
+        radio.checked = true;
+        radio.focus();
+        radio.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+    });
+  }
+
 
   /* ── Translate / Listening: enable when input has text ── */
   const textInput = form.querySelector('input[type="text"][name="answer"]');

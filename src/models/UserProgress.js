@@ -73,6 +73,32 @@ const UserProgress = {
     );
     return rows[0];
   },
+
+  /**
+   * Calculate completion percentage per skill.
+   * Compares completed exercises to total exercises for each skill.
+   */
+  async getSkillPercentages(userId) {
+    const { rows } = await pool.query(
+      `SELECT
+         e.skill,
+         COUNT(e.id)::int AS total,
+         COUNT(up.id) FILTER (WHERE up.completed = TRUE)::int AS completed
+       FROM exercises e
+       LEFT JOIN user_progress up ON up.exercise_id = e.id AND up.user_id = $1
+       WHERE e.skill IS NOT NULL AND e.lesson_id IS NOT NULL
+       GROUP BY e.skill`,
+      [userId]
+    );
+
+    const result = { reading: 0, listening: 0, speaking: 0, writing: 0 };
+    for (const row of rows) {
+      if (result.hasOwnProperty(row.skill)) {
+        result[row.skill] = row.total > 0 ? Math.round((row.completed / row.total) * 100) : 0;
+      }
+    }
+    return result;
+  },
 };
 
 module.exports = UserProgress;

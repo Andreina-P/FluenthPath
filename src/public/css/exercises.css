@@ -53,3 +53,24 @@
   font-size: var(--fp-text-xs);
   color: var(--fp-text-2);
 }
+
+/* ── Assessment timer (inline) ──────────────── */
+.assessment-timer {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--fp-space-2);
+  font-size: var(--fp-text-sm);
+  color: var(--fp-text-2);
+  font-variant-numeric: tabular-nums;
+}
+
+.assessment-timer__icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.assessment-timer--warning {
+  color: var(--fp-warning);
+  font-weight: 600;
+}

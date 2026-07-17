@@ -93,9 +93,16 @@ const exerciseController = {
       const correct    = (exercise.correct_answer || '').trim().toLowerCase().replace(/[^\p{L}\p{N} ]/gu, '').replace(/ +/g, ' ');
 
       // Speaking exercises are always marked as completed
-      const isCorrect = (exercise.type === 'speaking' || exercise.type === 'reading')
-        ? true
-        : userAnswer === correct;
+      let isCorrect;
+      if (exercise.type === 'speaking' || exercise.type === 'reading') {
+        isCorrect = true;
+      } else if (correct.includes('|')) {
+        // Multiple valid answers separated by "|"
+        const validAnswers = correct.split('|').map(a => a.trim());
+        isCorrect = validAnswers.includes(userAnswer);
+      } else {
+        isCorrect = userAnswer === correct;
+      }
 
       // Record progress
       await UserProgress.upsert(
@@ -162,7 +169,15 @@ const exerciseController = {
       // Clear feedback from session (consumed)
       delete req.session.exerciseFeedback;
 
+      // Find comprehension questions if this is a reading exercise
+      let comprehensionIds = [];
+      if (exercise && exercise.type === 'reading') {
+        const children = await Exercise.findByParent(exercise.id);
+        comprehensionIds = children.map(c => c.id);
+      }
+
       res.render('exercises/feedback', {
+        comprehensionIds,
         pageTitle:      fb.isCorrect ? 'Correct!' : 'Not Quite There',
         currentPage:    'lessons',
         showSidebar:    false,

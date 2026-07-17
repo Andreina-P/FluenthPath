@@ -45,6 +45,17 @@ const Exercise = {
     );
     return rows[0].total;
   },
+
+  /**
+   * Find comprehension questions for a reading exercise.
+   */
+  async findByParent(parentId) {
+    const { rows } = await pool.query(
+      'SELECT * FROM exercises WHERE parent_exercise_id = $1 ORDER BY order_index ASC',
+      [parentId]
+    );
+    return rows;
+  },
 };
 
 module.exports = Exercise;

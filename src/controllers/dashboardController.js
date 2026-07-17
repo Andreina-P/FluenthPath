@@ -23,6 +23,9 @@ const dashboardController = {
         ? Math.round((summary.total_correct / summary.total_completed) * 100)
         : 0;
 
+      // Calculate real skill percentages
+      const skillPcts = await UserProgress.getSkillPercentages(userId);
+
       res.render('dashboard/index', {
         pageTitle:      'Dashboard',
         currentPage:    'dashboard',
@@ -31,6 +34,7 @@ const dashboardController = {
         accuracy,
         recentLessons,
         allLessons,
+        skillPcts,
       });
 
     } catch (err) {

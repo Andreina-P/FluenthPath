@@ -357,7 +357,7 @@ input[type="radio"]:checked ~ .option__label {
 }
 
 .stat-badge--success {
-  background: #D1FAE5;
+  background: var(--fp-success-tint);
   color: var(--fp-success);
 }
 
@@ -367,7 +367,7 @@ input[type="radio"]:checked ~ .option__label {
 }
 
 .stat-badge--xp {
-  background: #FEF3C7;
+  background: var(--fp-xp-tint);
   color: var(--fp-xp);
 }
 
@@ -385,12 +385,12 @@ input[type="radio"]:checked ~ .option__label {
 }
 
 .flash--error {
-  background: #FEE2E2;
+  background: var(--fp-error-tint);
   color: var(--fp-error);
 }
 
 .flash--success {
-  background: #D1FAE5;
+  background: var(--fp-success-tint);
   color: var(--fp-success);
 }
 

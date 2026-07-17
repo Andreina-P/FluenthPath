@@ -27,6 +27,8 @@ const progressController = {
         lesson.progressPct = total > 0 ? Math.round((done / total) * 100) : 0;
       }
 
+      const skillPcts = await UserProgress.getSkillPercentages(userId);
+
       const accuracy = summary.total_completed > 0
         ? Math.round((summary.total_correct / summary.total_completed) * 100)
         : 0;
@@ -45,6 +47,7 @@ const progressController = {
         masteryPct,
         allLessons,
         recentLessons: await Lesson.findRecentByUser(userId),
+        skillPcts,
       });
 
     } catch (err) {

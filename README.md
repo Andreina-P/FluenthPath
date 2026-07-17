@@ -198,6 +198,25 @@ node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 
 ---
 
+
+## Important: Running SQL Seeds
+
+**Always run SQL seed files from pgAdmin Query Tool**, not from Windows PowerShell or CMD.
+
+PowerShell uses Windows-1252 encoding by default, which corrupts UTF-8 characters like accented letters (á, é, í, ó, ú, ñ, ¿, ¡). This causes text like "Buenos días" to display as "Buenos dÃ\xadas" in the application.
+
+**Correct way:**
+1. Open pgAdmin
+2. Right-click your `fluentpath` database → Query Tool
+3. Open the `.sql` file or paste its contents
+4. Press F5 (Execute)
+
+**If you must use PowerShell**, set the codepage to UTF-8 first:
+```powershell
+chcp 65001
+psql -U postgres -d fluentpath -f database/seeds/001_all_seeds.sql
+```
+
 ## Levantar el proyecto
 
 Antes que nada se realiza:

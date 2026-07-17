@@ -69,10 +69,10 @@
   <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(140px, 1fr)); gap:var(--fp-space-4);">
     <%
       const skills = [
-        { name: 'Reading',   icon: '📖', pct: userStats ? userStats.reading_pct : 0 },
-        { name: 'Listening', icon: '🎧', pct: userStats ? userStats.listening_pct : 0 },
-        { name: 'Speaking',  icon: '🗣', pct: userStats ? userStats.speaking_pct : 0 },
-        { name: 'Writing',   icon: '✏️', pct: userStats ? userStats.writing_pct : 0 },
+        { name: 'Reading',   icon: '📖', pct: typeof skillPcts !== 'undefined' ? skillPcts.reading : 0 },
+        { name: 'Listening', icon: '🎧', pct: typeof skillPcts !== 'undefined' ? skillPcts.listening : 0 },
+        { name: 'Speaking',  icon: '🗣', pct: typeof skillPcts !== 'undefined' ? skillPcts.speaking : 0 },
+        { name: 'Writing',   icon: '✏️', pct: typeof skillPcts !== 'undefined' ? skillPcts.writing : 0 },
       ];
     %>
     <% skills.forEach(skill => { %>

@@ -90,11 +90,10 @@ main:target {
 }
 
 .site-nav__link[aria-current="page"] {
-  color: var(--fp-primary);
-  background: var(--fp-primary-light);
-  font-weight: 600;
-  border-bottom: 3px solid var(--fp-primary);
-  border-radius: var(--fp-radius) var(--fp-radius) 0 0;
+  color: var(--fp-surface);
+  background: var(--fp-primary);
+  font-weight: 700;
+  border-radius: var(--fp-radius);
 }
 
 /* --- Header actions ---------------------------------------- */

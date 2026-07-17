@@ -197,6 +197,20 @@ const assessmentController = {
       next(err);
     }
   },
+
+  /**
+   * GET /assessment/retake
+   * Reset assessment level and redirect to settings.
+   */
+  async retake(req, res, next) {
+    try {
+      await UserStats.setAssessmentLevel(req.session.user.id, null);
+      req.session.flash = { type: 'info', message: 'Your previous assessment has been cleared. You can take it again.' };
+      res.redirect('/assessment');
+    } catch (err) {
+      next(err);
+    }
+  },
 };
 
 module.exports = assessmentController;

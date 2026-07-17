@@ -20,6 +20,11 @@
   --fp-success:  #0F766E; /* Teal 700   — 7.5:1 on white ✓  — streaks, correct  */
   --fp-error:    #B91C1C; /* Red 700    — 6.0:1 on white ✓  — errors, incorrect  */
   --fp-warning:  #B45309; /* Amber 700  — timer running low, caution alerts */
+  /* Semantic tints — light backgrounds for badges and flash messages */
+  --fp-success-tint: #D1FAE5; /* Emerald 100 — behind success text         */
+  --fp-error-tint:   #FEE2E2; /* Red 100     — behind error text            */
+  --fp-xp-tint:      #FEF3C7; /* Amber 100   — behind XP badge text         */
+
 
   /* Text — all ratios on white (#FFFFFF) */
   --fp-text-1:      #0F172A; /* Slate 900 — 18.1:1 ✓ — headings, body         */
