@@ -89,11 +89,12 @@ main:target {
   text-decoration: none;
 }
 
-/* aria-current="page" set by EJS based on currentPage local */
 .site-nav__link[aria-current="page"] {
   color: var(--fp-primary);
   background: var(--fp-primary-light);
   font-weight: 600;
+  border-bottom: 3px solid var(--fp-primary);
+  border-radius: var(--fp-radius) var(--fp-radius) 0 0;
 }
 
 /* --- Header actions ---------------------------------------- */
