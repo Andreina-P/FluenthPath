@@ -32,6 +32,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 /* ── Sessions ────────────────────────────────────────── */
+app.set('trust proxy', 1); // Trust Vercel's edge proxy for secure cookies
 app.use(session({
   store: new PgSession({
     pool,
