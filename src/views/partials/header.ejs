@@ -34,21 +34,21 @@
             <a
               href="/dashboard"
               class="site-nav__link"
-              <%= typeof currentPage !== 'undefined' && currentPage === 'dashboard' ? 'aria-current="page"' : '' %>
+              <% if (typeof currentPage !== "undefined" && currentPage === "dashboard") { %>aria-current="page"<% } %>
             >Dashboard</a>
           </li>
           <li>
             <a
               href="/lessons"
               class="site-nav__link"
-              <%= typeof currentPage !== 'undefined' && currentPage === 'lessons' ? 'aria-current="page"' : '' %>
+              <% if (typeof currentPage !== "undefined" && currentPage === "lessons") { %>aria-current="page"<% } %>
             >Lessons</a>
           </li>
           <li>
             <a
               href="/progress"
               class="site-nav__link"
-              <%= typeof currentPage !== 'undefined' && currentPage === 'progress' ? 'aria-current="page"' : '' %>
+              <% if (typeof currentPage !== "undefined" && currentPage === "progress") { %>aria-current="page"<% } %>
             >Progress</a>
           </li>
         </ul>
@@ -57,19 +57,22 @@
 
     <!-- Header action buttons -->
     <div class="site-header__actions">
-
-      <!--
-        WCAG 3.2.6: Help link — same position on every page.
-        Accessible name via aria-label since it's icon-only.
-      -->
-      <a href="/help" class="btn btn-ghost btn-icon" aria-label="Help and documentation">
-        <svg aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 20 20" fill="none">
-          <circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="1.5"/>
-          <path d="M10 14v.5M10 11c0-1.5 2-1.5 2-3a2 2 0 10-4 0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-        </svg>
-      </a>
-
       <% if (locals.user) { %>
+        <!--
+          WCAG 3.2.6: Help link — same position on every page.
+          Accessible name via aria-label since it's icon-only.
+        -->
+        <a
+          href="/help"
+          class="btn btn-ghost btn-icon"
+          aria-label="Help and documentation"
+          <% if (typeof currentPage !== "undefined" && currentPage === "help") { %>aria-current="page"<% } %>
+        >
+          <svg aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M10 14v.5M10 11c0-1.5 2-1.5 2-3a2 2 0 10-4 0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </a>
         <!--
           Sign Out — POST to /logout (not GET) to prevent
           accidental logout from browser prefetching.

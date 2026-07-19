@@ -78,6 +78,10 @@
   border-radius: var(--fp-radius);
 }
 
+.btn-icon[aria-current="page"] {
+  color: var(--fp-primary);
+}
+
 /* Danger / destructive */
 .btn-danger {
   background: var(--fp-error);
