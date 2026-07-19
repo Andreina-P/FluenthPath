@@ -63,3 +63,5 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`FluentPath running → http://localhost:${PORT}`);
 });
+
+module.exports = app;
