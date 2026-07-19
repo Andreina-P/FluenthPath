@@ -1,4 +1,5 @@
 const Lesson       = require('../models/Lesson');
+const UserStats    = require('../models/UserStats');
 const Exercise     = require('../models/Exercise');
 const UserProgress = require('../models/UserProgress');
 
@@ -28,10 +29,15 @@ const lessonController = {
         grouped[lesson.level].push(lesson);
       }
 
+      const userStats = await UserStats.findByUser(userId);
+      const dailyExercises = await UserProgress.countCompletedToday(userId);
+
       res.render('lessons/index', {
         pageTitle:    'Lessons',
         currentPage:  'lessons',
         grouped,
+        userStats,
+        dailyExercises,
         recentLessons: await Lesson.findRecentByUser(userId),
       });
 
@@ -67,6 +73,9 @@ const lessonController = {
       const totalEx    = exercises.length;
       const completedEx = exercises.filter(e => e.completed).length;
 
+      const userStats = await UserStats.findByUser(userId);
+      const dailyExercises = await UserProgress.countCompletedToday(userId);
+
       res.render('lessons/show', {
         pageTitle:    lesson.title,
         currentPage:  'lessons',
@@ -74,6 +83,8 @@ const lessonController = {
         exercises,
         totalEx,
         completedEx,
+        userStats,
+        dailyExercises,
         recentLessons: await Lesson.findRecentByUser(userId),
       });
 

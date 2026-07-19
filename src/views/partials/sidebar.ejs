@@ -19,9 +19,11 @@
       <div style="display:flex; justify-content:space-between; align-items:center;">
         <span style="font-size:0.875rem; color:var(--fp-text-2);">Daily Goal</span>
         <%
-          const goalPct = typeof userStats !== 'undefined' && userStats
-            ? Math.round((userStats.daily_xp || 0) / 50 * 100)
-            : 0;
+          /* Daily goal: auto-calculated as exercises completed today out of 5.
+             No manual goal setting needed. 5 exercises/day is the default target. */
+          const dailyDone = typeof dailyExercises !== 'undefined' ? dailyExercises : 0;
+          const dailyTarget = 5;
+          const goalPct = Math.min(100, Math.round((dailyDone / dailyTarget) * 100));
         %>
         <span class="stat-badge stat-badge--primary" ><span class="sr-only">Daily goal: </span><%= goalPct %>%<span class="sr-only"> complete</span>
         </span>

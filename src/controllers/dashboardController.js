@@ -23,6 +23,8 @@ const dashboardController = {
         ? Math.round((summary.total_correct / summary.total_completed) * 100)
         : 0;
 
+      const dailyExercises = await UserProgress.countCompletedToday(userId);
+
       // Calculate real skill percentages
       const skillPcts = await UserProgress.getSkillPercentages(userId);
 
@@ -35,6 +37,7 @@ const dashboardController = {
         recentLessons,
         allLessons,
         skillPcts,
+        dailyExercises,
       });
 
     } catch (err) {

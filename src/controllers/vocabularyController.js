@@ -1,4 +1,5 @@
 const Lesson     = require('../models/Lesson');
+const UserStats  = require('../models/UserStats');
 const Vocabulary = require('../models/Vocabulary');
 
 const vocabularyController = {
@@ -23,6 +24,7 @@ const vocabularyController = {
         currentPage:  'lessons',
         lesson,
         words,
+        userStats: await UserStats.findByUser(req.session.user.id),
         recentLessons: await Lesson.findRecentByUser(req.session.user.id),
       });
 
