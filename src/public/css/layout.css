@@ -174,11 +174,16 @@ main:focus {
 /* --- Footer ------------------------------------------------- */
 .site-footer {
   border-top: 2px solid var(--fp-border-card);
-  padding: var(--fp-space-6);
+  padding: var(--fp-space-6) var(--fp-space-6);
   text-align: left;
   font-size: var(--fp-text-sm);
   color: var(--fp-text-2);
   margin-top: auto;
+}
+
+.site-footer p {
+  max-width: none;
+  margin: 0;
 }
 
 /* --- Page section heading spacing -------------------------- */

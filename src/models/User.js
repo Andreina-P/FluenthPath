@@ -40,6 +40,20 @@ const User = {
   },
 
   /**
+   * Find a user by ID, including password_hash.
+   * ONLY for auth-sensitive operations (e.g. verifying current password
+   * before allowing a change). Never expose this row to a view or session —
+   * use findById() for anything that isn't a credential check.
+   */
+  async findByIdWithPassword(id) {
+    const { rows } = await pool.query(
+      'SELECT * FROM users WHERE id = $1',
+      [id]
+    );
+    return rows[0] || null;
+  },
+
+  /**
    * Update user name and email.
    */
   async update(id, name, email) {

@@ -78,6 +78,22 @@ const UserProgress = {
    * Calculate completion percentage per skill.
    * Compares completed exercises to total exercises for each skill.
    */
+
+  /**
+   * Count exercises completed today (for daily goal).
+   */
+  async countCompletedToday(userId) {
+    const { rows } = await pool.query(
+      `SELECT COUNT(*)::int AS done
+       FROM user_progress
+       WHERE user_id = $1
+         AND completed = TRUE
+         AND completed_at::date = CURRENT_DATE`,
+      [userId]
+    );
+    return rows[0].done;
+  },
+
   async getSkillPercentages(userId) {
     const { rows } = await pool.query(
       `SELECT

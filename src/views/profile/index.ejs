@@ -12,14 +12,31 @@
 
 <div class="profile-page" style="max-width:600px; margin:0 auto;">
 
-  <h1>Your Profile</h1>
-  <p style="color:var(--fp-text-2); margin-bottom:var(--fp-space-8);">
+  <!-- Decorative page anchor — not a real avatar (no image upload exists in scope) -->
+  <div style="display:flex; justify-content:center; margin-bottom:var(--fp-space-5);">
+    <div style="width:72px; height:72px; border-radius:50%; background:var(--fp-primary-light); display:flex; align-items:center; justify-content:center;">
+      <svg aria-hidden="true" focusable="false" width="36" height="36" viewBox="0 0 22 22" fill="none">
+        <circle cx="11" cy="8" r="4" stroke="var(--fp-primary)" stroke-width="1.6"/>
+        <path d="M3.5 19c0-3.8 3.3-6.5 7.5-6.5s7.5 2.7 7.5 6.5" stroke="var(--fp-primary)" stroke-width="1.6" stroke-linecap="round"/>
+      </svg>
+    </div>
+  </div>
+
+  <h1 style="text-align:center;">Your Profile</h1>
+  <p style="color:var(--fp-text-2); margin-bottom:var(--fp-space-8); text-align:center;">
     Manage your account information.
   </p>
 
   <!-- ═══ Personal information ═══ -->
   <section aria-labelledby="info-heading" style="margin-bottom:var(--fp-space-8);">
-    <h2 id="info-heading">Personal Information</h2>
+    <h2 id="info-heading" style="display:flex; align-items:center; gap:var(--fp-space-2);">
+      <!-- Decorative icon — heading text already conveys the meaning -->
+      <svg aria-hidden="true" focusable="false" width="22" height="22" viewBox="0 0 22 22" fill="none">
+        <circle cx="11" cy="8" r="4" stroke="var(--fp-primary)" stroke-width="1.6"/>
+        <path d="M3.5 19c0-3.8 3.3-6.5 7.5-6.5s7.5 2.7 7.5 6.5" stroke="var(--fp-primary)" stroke-width="1.6" stroke-linecap="round"/>
+      </svg>
+      Personal Information
+    </h2>
 
     <form action="/profile/update" method="POST">
       <div class="form-group">
@@ -56,7 +73,15 @@
 
   <!-- ═══ Change password ═══ -->
   <section aria-labelledby="password-heading" style="margin-bottom:var(--fp-space-8);">
-    <h2 id="password-heading">Change Password</h2>
+    <h2 id="password-heading" style="display:flex; align-items:center; gap:var(--fp-space-2);">
+      <!-- Decorative icon — heading text already conveys the meaning -->
+      <svg aria-hidden="true" focusable="false" width="22" height="22" viewBox="0 0 22 22" fill="none">
+        <rect x="5" y="10" width="12" height="8.5" rx="1.5" stroke="var(--fp-primary)" stroke-width="1.6"/>
+        <path d="M7.5 10V7a3.5 3.5 0 017 0v3" stroke="var(--fp-primary)" stroke-width="1.6" stroke-linecap="round"/>
+        <circle cx="11" cy="14" r="1.2" fill="var(--fp-primary)"/>
+      </svg>
+      Change Password
+    </h2>
 
     <form action="/profile/password" method="POST">
       <div class="form-group">
@@ -106,7 +131,14 @@
 
   <!-- ═══ Delete account ═══ -->
   <section aria-labelledby="delete-heading" style="margin-bottom:var(--fp-space-8);">
-    <h2 id="delete-heading" style="color:var(--fp-error);">Delete Account</h2>
+    <h2 id="delete-heading" style="color:var(--fp-error); display:flex; align-items:center; gap:var(--fp-space-2);">
+      <!-- Decorative icon — heading text already conveys the meaning -->
+      <svg aria-hidden="true" focusable="false" width="22" height="22" viewBox="0 0 22 22" fill="none">
+        <path d="M11 2.5l9 16H2l9-16z" stroke="var(--fp-error)" stroke-width="1.6" stroke-linejoin="round"/>
+        <path d="M11 9v4M11 15.5v.5" stroke="var(--fp-error)" stroke-width="1.6" stroke-linecap="round"/>
+      </svg>
+      Delete Account
+    </h2>
 
     <!--
       WCAG 3.3.4: Error prevention for irreversible actions.

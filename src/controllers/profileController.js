@@ -12,7 +12,7 @@ const profileController = {
 
       res.render('profile/index', {
         pageTitle:   'Your Profile',
-        currentPage: null,
+        currentPage: 'profile',
         showSidebar: false,
         centeredLayout: false,
         profileUser: user,
@@ -79,7 +79,9 @@ const profileController = {
       }
 
       // Verify current password
-      const user = await User.findById(userId);
+      // Uses findByIdWithPassword (not findById) because this is the one
+      // legitimate case in the app that needs the password_hash.
+      const user = await User.findByIdWithPassword(userId);
       const valid = await bcrypt.compare(currentPassword, user.password_hash);
       if (!valid) {
         req.session.flash = { type: 'error', message: 'Current password is incorrect.' };
