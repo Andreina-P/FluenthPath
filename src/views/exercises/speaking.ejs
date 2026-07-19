@@ -71,7 +71,7 @@
       No aria-disabled pattern needed because there is no wrong answer.
       The answer value "practiced" is what the controller expects.
     -->
-    <form action="/exercises/<%= exercise.id %>/submit" method="POST">
+    <form id="exercise-form" action="/exercises/<%= exercise.id %>/submit" method="POST">
       <input type="hidden" name="answer" value="practiced">
       <button type="submit" id="speaking-done" class="btn btn-primary" style="min-width:200px;">
         I practiced this

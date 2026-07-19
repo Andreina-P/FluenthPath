@@ -79,7 +79,7 @@
     <p style="color:var(--fp-text-2); margin-bottom:var(--fp-space-4); font-size:var(--fp-text-sm);">
       When you have finished reading, press the button below to mark this exercise as complete.
     </p>
-    <form action="/exercises/<%= exercise.id %>/submit" method="POST">
+    <form id="exercise-form" action="/exercises/<%= exercise.id %>/submit" method="POST">
       <input type="hidden" name="answer" value="read">
       <button type="submit" class="btn btn-primary" style="min-width:200px;">
         I finished reading

@@ -26,8 +26,8 @@
 </div>
 
 <!-- Stats cards -->
-<section aria-labelledby="overview-heading" style="margin-bottom:var(--fp-space-8);">
-  <h2 id="overview-heading">Overview</h2>
+<section aria-labelledby="prog-overview-heading" style="margin-bottom:var(--fp-space-8);">
+  <h2 id="prog-overview-heading">Overview</h2>
 
   <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(140px, 1fr)); gap:var(--fp-space-4);">
 
@@ -63,8 +63,8 @@
 </section>
 
 <!-- Skill Breakdown -->
-<section aria-labelledby="skills-heading" style="margin-bottom:var(--fp-space-8);">
-  <h2 id="skills-heading">Skill Breakdown</h2>
+<section aria-labelledby="prog-skills-heading" style="margin-bottom:var(--fp-space-8);">
+  <h2 id="prog-skills-heading">Skill Breakdown</h2>
 
   <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(140px, 1fr)); gap:var(--fp-space-4);">
     <%
@@ -101,13 +101,13 @@
 </section>
 
 <!-- Per-lesson progress -->
-<section aria-labelledby="lessons-progress-heading">
-  <h2 id="lessons-progress-heading">Lessons Progress</h2>
+<section aria-labelledby="prog-lessons-heading">
+  <h2 id="prog-lessons-heading">Lessons Progress</h2>
 
   <% if (allLessons && allLessons.length > 0) { %>
     <div style="display:flex; flex-direction:column; gap:var(--fp-space-3);">
       <% allLessons.forEach(lesson => { %>
-        <div class="lesson-item" style="cursor:default;">
+        <a href="/lessons/<%= lesson.id %>" class="lesson-item" style="text-decoration:none; color:inherit;">
           <div style="flex:1;">
             <p class="lesson-item__title"><%= lesson.title %></p>
             <p class="lesson-item__meta">
@@ -128,7 +128,7 @@
             </div>
             <span style="font-size:var(--fp-text-xs); color:var(--fp-text-2);"><%= lesson.progressPct %>%</span>
           </div>
-        </div>
+        </a>
       <% }) %>
     </div>
   <% } else { %>

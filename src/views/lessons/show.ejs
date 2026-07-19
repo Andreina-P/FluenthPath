@@ -23,12 +23,12 @@
     aria-valuenow="<%= completedEx %>"
     aria-valuemin="0"
     aria-valuemax="<%= totalEx %>"
-    aria-label="Lesson progress: <%= completedEx %> of <%= totalEx %> exercises completed"
+    aria-label="Lesson progress: <%= completedEx %> of <%= exercises.filter(e => !e.parent_exercise_id).length %> exercises completed"
     class="progress-bar session-progress__bar"
   >
     <div class="progress-bar__fill" style="width:<%= totalEx > 0 ? Math.round(completedEx / totalEx * 100) : 0 %>%"></div>
   </div>
-  <span class="session-progress__label"><%= completedEx %> / <%= totalEx %> completed</span>
+  <span class="session-progress__label"><%= completedEx %> / <%= exercises.filter(e => !e.parent_exercise_id).length %> completed</span>
 </div>
 
 <!-- Exercise list -->
@@ -37,7 +37,8 @@
 
   <% if (exercises && exercises.length > 0) { %>
     <div style="display:flex; flex-direction:column; gap:var(--fp-space-3);">
-      <% exercises.forEach((ex, i) => { %>
+      <% const mainExercises = exercises.filter(ex => !ex.parent_exercise_id); %>
+        <% mainExercises.forEach((ex, i) => { %>
 
         <%
           const typeLabels = {
@@ -46,6 +47,7 @@
             listening:       'Listening',
             word_bank:       'Word bank',
             speaking:        'Speaking practice',
+            reading:         'Reading story',
           };
           const typeLabel = typeLabels[ex.type] || ex.type;
         %>

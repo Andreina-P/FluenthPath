@@ -38,6 +38,18 @@
 <div class="exercise-page">
 
   <!-- Instruction -->
+  
+  <!-- Link to re-read the story (comprehension questions only) -->
+  <% if (exercise.parent_exercise_id) { %>
+    <div style="margin-bottom:var(--fp-space-4);">
+      <a href="/exercises/<%= exercise.parent_exercise_id %>"
+         class="btn btn-ghost"
+         style="font-size:var(--fp-text-sm);">
+        Re-read the story
+      </a>
+    </div>
+  <% } %>
+
   <!-- Audio player for listening-cloze exercises (skill=listening) -->
   <% if (exercise.audio_url) { %>
     <div class="audio-player" style="margin-bottom:var(--fp-space-4);">
