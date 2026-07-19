@@ -1,0 +1,159 @@
+<!--
+  Profile page — accessible form for account management.
+  WCAG 3.3.2: Visible labels on every input.
+  WCAG 3.3.4: Delete account has double confirmation.
+  WCAG 3.3.8: No CAPTCHA.
+  All POST forms use PRG pattern.
+-->
+
+<style>
+  .profile-page p { max-width: none; }
+</style>
+
+<div class="profile-page" style="max-width:600px; margin:0 auto;">
+
+  <h1>Your Profile</h1>
+  <p style="color:var(--fp-text-2); margin-bottom:var(--fp-space-8);">
+    Manage your account information.
+  </p>
+
+  <!-- ═══ Personal information ═══ -->
+  <section aria-labelledby="info-heading" style="margin-bottom:var(--fp-space-8);">
+    <h2 id="info-heading">Personal Information</h2>
+
+    <form action="/profile/update" method="POST">
+      <div class="form-group">
+        <label for="name" class="form-label">Full name</label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          class="form-input"
+          value="<%= profileUser.name %>"
+          autocomplete="name"
+          required
+          aria-required="true"
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="email" class="form-label">Email address</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          class="form-input"
+          value="<%= profileUser.email %>"
+          autocomplete="email"
+          required
+          aria-required="true"
+        >
+      </div>
+
+      <button type="submit" class="btn btn-primary">Save changes</button>
+    </form>
+  </section>
+
+  <!-- ═══ Change password ═══ -->
+  <section aria-labelledby="password-heading" style="margin-bottom:var(--fp-space-8);">
+    <h2 id="password-heading">Change Password</h2>
+
+    <form action="/profile/password" method="POST">
+      <div class="form-group">
+        <label for="currentPassword" class="form-label">Current password</label>
+        <input
+          type="password"
+          id="currentPassword"
+          name="currentPassword"
+          class="form-input"
+          autocomplete="current-password"
+          required
+          aria-required="true"
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="newPassword" class="form-label">New password</label>
+        <input
+          type="password"
+          id="newPassword"
+          name="newPassword"
+          class="form-input"
+          autocomplete="new-password"
+          required
+          aria-required="true"
+          aria-describedby="password-hint"
+        >
+        <p id="password-hint" class="form-hint">Must be at least 8 characters.</p>
+      </div>
+
+      <div class="form-group">
+        <label for="confirmPassword" class="form-label">Confirm new password</label>
+        <input
+          type="password"
+          id="confirmPassword"
+          name="confirmPassword"
+          class="form-input"
+          autocomplete="new-password"
+          required
+          aria-required="true"
+        >
+      </div>
+
+      <button type="submit" class="btn btn-primary">Change password</button>
+    </form>
+  </section>
+
+  <!-- ═══ Delete account ═══ -->
+  <section aria-labelledby="delete-heading" style="margin-bottom:var(--fp-space-8);">
+    <h2 id="delete-heading" style="color:var(--fp-error);">Delete Account</h2>
+
+    <!--
+      WCAG 3.3.4: Error prevention for irreversible actions.
+      Uses <details>/<summary> instead of a modal — no focus trap risk.
+      User must type DELETE to confirm — cognitive barrier prevents accidents.
+    -->
+    <details class="card" style="border-color:var(--fp-error);">
+      <summary style="font-weight:600; font-size:var(--fp-text-sm); color:var(--fp-error); padding:var(--fp-space-2) 0; cursor:pointer;">
+        I want to delete my account
+      </summary>
+
+      <div style="margin-top:var(--fp-space-4); padding-top:var(--fp-space-4); border-top:1px solid var(--fp-border-card);">
+        <p style="color:var(--fp-text-1); font-size:var(--fp-text-sm); margin-bottom:var(--fp-space-4);">
+          This action is permanent and cannot be undone. All your progress, exercises, and account data will be permanently deleted.
+        </p>
+
+        <form action="/profile/delete" method="POST">
+          <div class="form-group">
+            <label for="confirmDelete" class="form-label" style="color:var(--fp-error);">
+              Type DELETE to confirm
+            </label>
+            <input
+              type="text"
+              id="confirmDelete"
+              name="confirmDelete"
+              class="form-input"
+              autocomplete="off"
+              required
+              aria-required="true"
+              aria-describedby="delete-hint"
+              style="border-color:var(--fp-error);"
+            >
+            <p id="delete-hint" class="form-hint" style="color:var(--fp-error);">
+              This will permanently delete your account and all associated data.
+            </p>
+          </div>
+
+          <button type="submit" class="btn btn-danger">
+            Delete my account permanently
+          </button>
+        </form>
+      </div>
+    </details>
+  </section>
+
+  <div style="margin-top:var(--fp-space-6);">
+    <a href="/dashboard" class="btn btn-secondary">Back to dashboard</a>
+  </div>
+
+</div>

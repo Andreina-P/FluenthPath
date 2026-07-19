@@ -38,6 +38,36 @@ const User = {
     );
     return rows[0];
   },
+
+  /**
+   * Update user name and email.
+   */
+  async update(id, name, email) {
+    const { rows } = await pool.query(
+      'UPDATE users SET name = $2, email = $3 WHERE id = $1 RETURNING id, name, email',
+      [id, name, email]
+    );
+    return rows[0];
+  },
+
+  /**
+   * Update user password hash.
+   */
+  async updatePassword(id, passwordHash) {
+    await pool.query(
+      'UPDATE users SET password_hash = $2 WHERE id = $1',
+      [id, passwordHash]
+    );
+  },
+
+  /**
+   * Delete a user account and all associated data (cascades via FK).
+   */
+  async deleteById(id) {
+    await pool.query('DELETE FROM user_stats WHERE user_id = $1', [id]);
+    await pool.query('DELETE FROM user_progress WHERE user_id = $1', [id]);
+    await pool.query('DELETE FROM users WHERE id = $1', [id]);
+  },
 };
 
 module.exports = User;

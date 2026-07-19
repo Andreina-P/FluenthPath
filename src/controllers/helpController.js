@@ -6,7 +6,7 @@ const helpController = {
   index(req, res) {
     res.render('help/index', {
       pageTitle:   'Help and FAQ',
-      currentPage: null,
+      currentPage: 'help',
       showSidebar: false,
     });
   },
