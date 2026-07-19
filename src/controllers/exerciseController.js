@@ -57,6 +57,10 @@ const exerciseController = {
         exercise.word_bank_items = JSON.parse(exercise.word_bank_items);
       }
 
+      const userId = req.session.user.id;
+      const userStats = await UserStats.findByUser(userId);
+      const dailyExercises = await UserProgress.countCompletedToday(userId);
+
       res.render(view, {
         pageTitle:     lesson ? `Exercise: ${lesson.title}` : 'Exercise',
         currentPage:   'lessons',
@@ -64,8 +68,10 @@ const exerciseController = {
         lesson,
         sessionTotal:  sessionExercises.length,
         sessionCurrent: currentIndex + 1,
+        userStats,
+        dailyExercises,
         recentLessons: lesson
-          ? await Lesson.findRecentByUser(req.session.user.id)
+          ? await Lesson.findRecentByUser(userId)
           : [],
       });
 
@@ -89,19 +95,23 @@ const exerciseController = {
         return next(err);
       }
 
-      const userAnswer = (req.body.answer || '').trim().toLowerCase().replace(/[^\p{L}\p{N} ]/gu, '').replace(/ +/g, ' ');
-      const correct    = (exercise.correct_answer || '').trim().toLowerCase().replace(/[^\p{L}\p{N} ]/gu, '').replace(/ +/g, ' ');
+      // Normalize helper: strip punctuation, collapse spaces, lowercase
+      const normalize = (s) => (s || '').trim().toLowerCase()
+        .replace(/[^\p{L}\p{N} ]/gu, '').replace(/ +/g, ' ');
 
-      // Speaking exercises are always marked as completed
+      const userAnswer = normalize(req.body.answer);
+
+      // Speaking and reading exercises are always marked as completed
       let isCorrect;
       if (exercise.type === 'speaking' || exercise.type === 'reading') {
         isCorrect = true;
-      } else if (correct.includes('|')) {
-        // Multiple valid answers separated by "|"
-        const validAnswers = correct.split('|').map(a => a.trim());
-        isCorrect = validAnswers.includes(userAnswer);
       } else {
-        isCorrect = userAnswer === correct;
+        // Split BEFORE normalizing — pipe "|" separates valid answers
+        const rawCorrect = (exercise.correct_answer || '');
+        const validAnswers = rawCorrect.includes('|')
+          ? rawCorrect.split('|').map(a => normalize(a))
+          : [normalize(rawCorrect)];
+        isCorrect = validAnswers.includes(userAnswer);
       }
 
       // Record progress

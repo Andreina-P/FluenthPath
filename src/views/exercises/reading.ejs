@@ -62,7 +62,19 @@
       aria-label="Reading passage: <%= exercise.question_text %>"
       style="padding:var(--fp-space-6); margin-bottom:var(--fp-space-5); line-height:1.8; font-size:var(--fp-text-base);"
     >
-      <%- exercise.reading_text.replace(/\n\n/g, '</p><p style="margin-bottom:var(--fp-space-4);">').replace(/^/, '<p style="margin-bottom:var(--fp-space-4);">').replace(/$/, '</p>') %>
+      <%- exercise.reading_text
+            .split('\n')
+            .map(line => {
+              const trimmed = line.trim();
+              if (!trimmed) return '<br aria-hidden="true">';
+              // Bold the speaker name if line starts with "Name:"
+              const match = trimmed.match(/^([A-Za-z]+:)(.*)$/);
+              if (match) {
+                return '<p style="margin-bottom:var(--fp-space-2);"><strong>' + match[1] + '</strong>' + match[2] + '</p>';
+              }
+              return '<p style="margin-bottom:var(--fp-space-2);">' + trimmed + '</p>';
+            })
+            .join('') %>
     </article>
   <% } %>
 

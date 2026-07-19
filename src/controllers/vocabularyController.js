@@ -1,4 +1,5 @@
 const Lesson     = require('../models/Lesson');
+const UserProgress = require('../models/UserProgress');
 const UserStats  = require('../models/UserStats');
 const Vocabulary = require('../models/Vocabulary');
 
@@ -25,6 +26,7 @@ const vocabularyController = {
         lesson,
         words,
         userStats: await UserStats.findByUser(req.session.user.id),
+        dailyExercises: await UserProgress.countCompletedToday(req.session.user.id),
         recentLessons: await Lesson.findRecentByUser(req.session.user.id),
       });
 
