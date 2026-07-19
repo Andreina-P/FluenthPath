@@ -1,140 +1,142 @@
 # FluentPath
 
-Plataforma web accesible para el aprendizaje del idioma inglés, desarrollada como proyecto de Usabilidad y Accesibilidad — Escuela Politécnica Nacional.
+Accessible web platform for learning English. Built for the Usability and Accessibility course at Escuela Politecnica Nacional.
 
-Cumple **WCAG 2.2 nivel AA**. Diseñada para ser utilizada indistintamente por personas videntes y personas ciegas mediante lector de pantalla (probado con **NVDA**), sin ningún modo o ajuste de accesibilidad que activar: la accesibilidad es el comportamiento por defecto de toda la interfaz.
+Complies with **WCAG 2.2 Level AA**. Designed to work equally well for sighted users and screen reader users (tested with NVDA). Accessibility is the default behavior — there is no "accessible mode" to activate.
 
----
-
-## Tabla de contenido
-
-- [Stack tecnológico](#stack-tecnológico)
-- [Requisitos previos](#requisitos-previos)
-- [Estructura del proyecto](#estructura-del-proyecto)
-- [Instalación](#instalación)
-- [Configuración de la base de datos](#configuración-de-la-base-de-datos)
-- [Variables de entorno](#variables-de-entorno)
-- [Levantar el proyecto](#levantar-el-proyecto)
-- [Archivos de audio pendientes](#archivos-de-audio-pendientes)
-- [Rutas de la aplicación](#rutas-de-la-aplicación)
-- [Decisiones de accesibilidad](#decisiones-de-accesibilidad)
-- [Checklist WCAG 2.2 AA implementado](#checklist-wcag-22-aa-implementado)
-- [Solución de problemas](#solución-de-problemas)
+**Live:** Deployed on Vercel + Supabase.
 
 ---
 
-## Stack tecnológico
+## Stack
 
-| Capa | Tecnología |
+| Layer | Technology |
 |---|---|
 | Runtime | Node.js |
-| Framework HTTP | Express.js |
-| Motor de vistas | EJS (Server-Side Rendering) |
-| Estilos | CSS nativo (sin frameworks) |
-| JavaScript cliente | Vanilla JS, mínimo e imprescindible |
-| Base de datos | PostgreSQL |
-| Sesiones | express-session + connect-pg-simple |
-| Contraseñas | bcryptjs |
-
-**Por qué SSR y no una SPA:** los lectores de pantalla funcionan de forma más predecible con HTML real enviado por el servidor. Cada navegación dispara el anuncio automático del `<title>`, y el foco se resetea de forma natural al inicio del documento — comportamiento que una SPA tendría que replicar manualmente y es fácil de hacer mal.
-
----
-
-## Requisitos previos
-
-- Node.js 18 o superior
-- PostgreSQL 14 o superior
-- npm
+| Framework | Express.js |
+| Views | EJS (Server-Side Rendering) |
+| Styles | Native CSS (Deep Ocean palette) |
+| Client JS | Vanilla JS, minimal |
+| Database | PostgreSQL (Supabase) |
+| Sessions | express-session + connect-pg-simple |
+| Passwords | bcryptjs |
+| Hosting | Vercel |
 
 ---
 
-## Estructura del proyecto
+## Project Structure
 
 ```
-fluentpath/
-├── app.js                          # Punto de entrada de Express
-├── .env.example                    # Plantilla de variables de entorno
+FluenthPath/
+├── app.js
+├── .env.example
 ├── package.json
 │
 ├── database/
-│   ├── migrations/                 # 6 migraciones SQL, numeradas en orden
-│   └── seeds/                      # Datos iniciales (lecciones, ejercicios, vocabulario)
+│   ├── migrations/
+│   │   ├── 001_create_users.sql
+│   │   ├── 002_create_lessons.sql
+│   │   ├── 003_create_exercises.sql
+│   │   ├── 004_create_user_progress.sql
+│   │   ├── 005_create_user_stats.sql
+│   │   ├── 006_create_vocabulary.sql
+│   │   ├── 007_add_skill_and_reading.sql
+│   │   └── 008_add_parent_exercise_id.sql
+│   └── seeds/
+│       ├── 001_all_seeds.sql
+│       ├── 002_vocabulary_and_speaking.sql
+│       ├── 003_reading_and_listening_cloze.sql
+│       ├── 004_fix_encoding_and_answers.sql
+│       ├── 005_conversational_level.sql
+│       └── 006_update_all_content.sql
 │
 └── src/
     ├── config/
-    │   └── database.js             # Pool de conexión a PostgreSQL
+    │   └── database.js
     │
-    ├── controllers/                # Lógica de negocio por dominio
+    ├── controllers/
     │   ├── authController.js
-    │   ├── dashboardController.js
-    │   ├── lessonController.js
-    │   ├── exerciseController.js
     │   ├── assessmentController.js
+    │   ├── dashboardController.js
+    │   ├── exerciseController.js
+    │   ├── helpController.js
+    │   ├── lessonController.js
     │   ├── onboardingController.js
+    │   ├── profileController.js
     │   ├── progressController.js
     │   └── vocabularyController.js
     │
-    ├── models/                     # Acceso a datos (SQL plano, sin ORM)
+    ├── models/
     │   ├── User.js
     │   ├── UserStats.js
+    │   ├── UserProgress.js
     │   ├── Lesson.js
     │   ├── Exercise.js
-    │   ├── UserProgress.js
     │   └── Vocabulary.js
     │
-    ├── routes/                     # Definición de endpoints Express
+    ├── routes/
+    │   ├── index.js
+    │   ├── authRoutes.js
+    │   ├── assessmentRoutes.js
+    │   ├── dashboardRoutes.js
+    │   ├── exerciseRoutes.js
+    │   ├── helpRoutes.js
+    │   ├── lessonRoutes.js
+    │   ├── onboardingRoutes.js
+    │   ├── profileRoutes.js
+    │   └── progressRoutes.js
     │
     ├── middleware/
-    │   ├── requireAuth.js          # Protege rutas autenticadas
-    │   ├── setLocals.js            # Inyecta datos comunes a todas las vistas
-    │   └── errorHandler.js         # Manejo centralizado de errores → 404/500
+    │   ├── requireAuth.js
+    │   ├── setLocals.js
+    │   └── errorHandler.js
     │
-    ├── views/                      # Plantillas EJS
-    │   ├── layouts/main.ejs        # Layout base: skip link, live region, landmarks
-    │   ├── partials/               # Header, sidebar, flash, keyboard-hint
-    │   ├── auth/                   # Login, registro
-    │   ├── onboarding/             # 3 páginas de bienvenida (no modal)
-    │   ├── dashboard/
-    │   ├── lessons/                # Lista y detalle de lecciones
-    │   ├── vocabulary/             # Tarjetas estáticas de vocabulario
-    │   ├── exercises/              # 5 tipos de ejercicio + feedback
-    │   ├── assessment/             # Configuración de timer, pregunta, resultados
-    │   ├── progress/
-    │   └── errors/                 # 404, 500
+    ├── views/
+    │   ├── layouts/main.ejs
+    │   ├── partials/ (header, sidebar, flash, keyboard-hint)
+    │   ├── auth/ (login, register)
+    │   ├── onboarding/ (step-1 through step-5)
+    │   ├── dashboard/index.ejs
+    │   ├── lessons/ (index, show)
+    │   ├── vocabulary/index.ejs
+    │   ├── exercises/ (multiple-choice, translate, listening, word-bank, speaking, reading, feedback)
+    │   ├── assessment/ (settings, question, results)
+    │   ├── progress/index.ejs
+    │   ├── profile/index.ejs
+    │   ├── help/index.ejs
+    │   └── errors/ (404, 500)
     │
     └── public/
-        ├── css/                    # base, layout, components, exercises, animations, focus
-        ├── js/                     # focus-manager, live-region, exercise, word-bank
-        └── audio/                  # Archivos .mp3 de los ejercicios (ver sección aparte)
+        ├── css/ (base, layout, components, exercises, animations, focus)
+        ├── js/ (focus-manager, live-region, exercise, word-bank)
+        └── audio/ (10 audio files)
 ```
 
 ---
 
-## Instalación
+## Installation (Local)
 
 ```bash
 # Instalar dependencias
 npm install
+cp .env.example .env
+# Edit .env with your PostgreSQL connection and session secret
 ```
 
 ---
 
-## Configuración de la base de datos
+## Database Setup
 
-### 1. Crear la base de datos
-
-```bash
-psql -U postgres
-```
+### Create the database
 
 ```sql
 CREATE DATABASE fluentpath;
 \q
 ```
 
-### 2. Ejecutar las migraciones en orden
+### Run migrations in order
 
-Las migraciones están numeradas y deben ejecutarse en secuencia porque hay dependencias de llaves foráneas (`lessons` debe existir antes que `exercises`, por ejemplo):
+Run these from **pgAdmin Query Tool** or **Supabase SQL Editor** (not PowerShell):
 
 ```bash
 psql -U postgres -d fluentpath -f database/migrations/001_create_users.sql
@@ -160,170 +162,97 @@ Esto carga 4 lecciones, 12 ejercicios (2 de cada tipo: multiple choice, translat
 
 | Tabla | Contenido |
 |---|---|
-| `users` | Cuentas de usuario (nombre, email, hash de contraseña) |
-| `lessons` | Lecciones agrupadas por nivel (beginner, elementary, conversational) |
-| `exercises` | Los 5 tipos de ejercicio + assessment, con `pro_tip` para feedback |
-| `user_progress` | Registro de intentos y aciertos por usuario y ejercicio |
-| `user_stats` | XP, racha, nivel de assessment, porcentaje por habilidad |
-| `vocabulary` | Tarjetas de palabra + definición + ejemplo por lección |
-| `user_sessions` | Creada automáticamente por `connect-pg-simple` al arrancar el servidor |
+| `ex-speaking-01.mp3` | Hi Eleanor, I'm Michael conversation |
+| `ex-speaking-02.mp3` | Al, Bob, and Anita introduction |
+| `ex-reading-01.mp3` | What's Your Name? (Marie and Ben) |
+| `ex-reading-02.mp3` | Social Life (meeting Stephanie) |
+| `ex-reading-conv-01.mp3` | Ordering in a Restaurant |
+| `ex-reading-03.mp3` | Additional reading audio |
+| `ex-listening-01.mp3` | "I was hiding under your porch because I love you." |
+| `ex-listening-02.mp3` | "I was wondering what would break first." |
+| `ex-listening-cloze-01.mp3` | "We were just talking about you." |
+| `ex-listening-cloze-02.mp3` | "I was expecting someone with your reputation..." |
 
 ---
 
-## Variables de entorno
-
-Copia la plantilla y complétala:
-
-```bash
-cp .env.example .env
-```
+## Environment Variables
 
 ```env
-DATABASE_URL=postgresql://usuario:contraseña@localhost:5432/fluentpath
-SESSION_SECRET=una_cadena_aleatoria_de_al_menos_32_caracteres
+DATABASE_URL=postgresql://user:password@host:5432/fluentpath
+SESSION_SECRET=random_string_minimum_32_characters
 NODE_ENV=development
 PORT=3000
 ```
 
-**`DATABASE_URL`** — cadena de conexión completa a PostgreSQL. Ajusta usuario, contraseña, host y puerto según tu instalación local.
-
-**`SESSION_SECRET`** — cualquier cadena larga y aleatoria. Puedes generar una rápido con:
+Generate a session secret:
 ```bash
 node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 ```
 
-**`NODE_ENV`** — `development` en local. En producción, cambia a `production` para que las cookies de sesión exijan HTTPS (`secure: true`).
-
-**`PORT`** — puerto donde corre el servidor Express. 3000 por defecto.
-
 ---
 
-
-## Important: Running SQL Seeds
-
-**Always run SQL seed files from pgAdmin Query Tool**, not from Windows PowerShell or CMD.
-
-PowerShell uses Windows-1252 encoding by default, which corrupts UTF-8 characters like accented letters (á, é, í, ó, ú, ñ, ¿, ¡). This causes text like "Buenos días" to display as "Buenos dÃ\xadas" in the application.
-
-**Correct way:**
-1. Open pgAdmin
-2. Right-click your `fluentpath` database → Query Tool
-3. Open the `.sql` file or paste its contents
-4. Press F5 (Execute)
-
-**If you must use PowerShell**, set the codepage to UTF-8 first:
-```powershell
-chcp 65001
-psql -U postgres -d fluentpath -f database/seeds/001_all_seeds.sql
-```
-
-## Levantar el proyecto
-
-Antes que nada se realiza:
-```bash
-npm install express-ejs-layouts
-```
-
-**Modo desarrollo** (reinicia automáticamente al guardar cambios, requiere `nodemon` ya incluido en `devDependencies`):
+## Running
 
 ```bash
-npm run dev
+npm run dev    # Development (auto-restart on changes)
+npm start      # Production
 ```
 
-**Modo producción:**
-
-```bash
-npm start
-```
-
-La aplicación queda disponible en `http://localhost:3000`. La ruta raíz `/` redirige automáticamente a `/login` si no hay sesión activa, o a `/dashboard` (u `/onboarding/1` en el primer ingreso) si ya hay sesión.
+The app runs at `http://localhost:3000`.
 
 ---
 
-## Archivos de audio pendientes
+## Routes
 
-El proyecto referencia 4 archivos de audio que **vienen incluidos(pero son incorrectos)** y deben corregirse en `src/public/audio/`:
-
-| Archivo | Usado en | Contenido a grabar |
-|---|---|---|
-| `ex-listening-01.mp3` | Lección 3, ejercicio 1 | "They were walking to the market yesterday morning." |
-| `ex-listening-02.mp3` | Lección 3, ejercicio 2 | "She was studying English when the phone rang." |
-| `ex-speaking-01.mp3` | Lección 1, ejercicio 3 | "Good morning! How are you today?" |
-| `ex-speaking-02.mp3` | Lección 1, ejercicio 4 | "Nice to meet you. My name is Alex." |
-| `ex-reading-01.mp3` | --- | --- |
-| `ex-reading-02.mp3` | --- | --- |
-| `ex-listening-cloze-01.mp3` | --- | --- |
-| `ex-listening-cloze-02.mp3` | --- | --- |
-
-Pueden grabarse manualmente o generarse con cualquier herramienta de texto a voz (TTS) en inglés. Sin estos archivos, los ejercicios de tipo `listening` y `speaking` mostrarán el reproductor de audio vacío, pero el resto de la aplicación funciona con normalidad.
-
----
-
-## Rutas de la aplicación
-
-| Método | Ruta | Requiere sesión |
-|---|---|:---:|
-| GET/POST | `/login`, `/register` | No |
-| POST | `/logout` | Sí |
-| GET | `/onboarding/:step` (1–3) | Sí |
-| POST | `/onboarding/complete` | Sí |
-| GET | `/dashboard` | Sí |
-| GET | `/lessons` | Sí |
-| GET | `/lessons/:id` | Sí |
-| GET | `/lessons/:id/vocabulary` | Sí |
-| GET | `/exercises/:id` | Sí |
-| POST | `/exercises/:id/submit` | Sí |
-| GET | `/exercises/:id/feedback` | Sí |
-| GET | `/assessment` | Sí |
-| POST | `/assessment/start` | Sí |
-| GET | `/assessment/question` | Sí |
-| POST | `/assessment/submit` | Sí |
-| GET | `/assessment/results` | Sí |
-| GET | `/progress` | Sí |
-
-Todas las rutas POST usan el patrón **Post-Redirect-Get (PRG)** para evitar reenvíos duplicados al refrescar el navegador.
+| Method | Path | Auth | Description |
+|---|---|:---:|---|
+| GET/POST | `/login`, `/register` | No | Authentication |
+| POST | `/logout` | Yes | End session |
+| GET | `/onboarding/:step` | Yes | Welcome guide (5 steps) |
+| POST | `/onboarding/complete` | Yes | Mark onboarding as seen |
+| GET | `/dashboard` | Yes | Main dashboard |
+| GET | `/lessons` | Yes | All lessons by level |
+| GET | `/lessons/:id` | Yes | Lesson detail + exercises |
+| GET | `/lessons/:id/vocabulary` | Yes | Vocabulary cards |
+| GET | `/exercises/:id` | Yes | Exercise (dispatches by type) |
+| POST | `/exercises/:id/submit` | Yes | Submit answer |
+| GET | `/exercises/:id/feedback` | Yes | Result + Pro-Tip |
+| GET | `/assessment` | Yes | Timer settings |
+| POST | `/assessment/start` | Yes | Begin assessment |
+| GET | `/assessment/question` | Yes | Current question |
+| POST | `/assessment/submit` | Yes | Submit + advance |
+| GET | `/assessment/results` | Yes | Assigned level |
+| GET | `/assessment/retake` | Yes | Reset and retake |
+| GET | `/progress` | Yes | Full progress page |
+| GET | `/profile` | Yes | Account settings |
+| POST | `/profile/update` | Yes | Change name/email |
+| POST | `/profile/password` | Yes | Change password |
+| POST | `/profile/delete` | Yes | Delete account |
+| GET | `/help` | Yes | Help and FAQ |
 
 ---
 
-## Decisiones de accesibilidad
+## Lessons and Content
 
-Estas decisiones de diseño están tomadas deliberadamente y no deben revertirse sin volver a evaluar el impacto en accesibilidad:
-
-- **Sin modales ni pop-ups.** El feedback de ejercicios y el onboarding son páginas reales con su propia URL, no overlays. Evita el manejo manual de trampas de foco.
-- **Sin hover para vocabulario.** Las definiciones se muestran siempre visibles en tarjetas `<article>`, nunca ocultas detrás de un tooltip.
-- **Sin pantalla de ajustes de accesibilidad.** No existe un "modo accesible" que activar — el comportamiento accesible es el único disponible.
-- **Sin reconocimiento de voz.** El ejercicio de speaking usa un botón "I practiced this" en lugar de la Web Speech API, que tiene soporte inconsistente con lectores de pantalla.
-- **Sin audio de fondo.** El único audio de la aplicación es el de los ejercicios de listening/speaking, bajo control directo del usuario mediante `<audio controls>` nativo, sin autoplay.
-- **Botón "Continue/Check Answer" con `aria-disabled`, no `disabled`.** El atributo HTML `disabled` saca el botón del orden de Tab, dejándolo invisible para un usuario de lector de pantalla hasta que ya haya respondido. `aria-disabled="true"` lo mantiene alcanzable y anunciado como "dimmed", con un texto de ayuda vinculado por `aria-describedby`.
-- **`focus.css` se carga siempre último y no debe modificarse** para dar prioridad a preferencias estéticas — la visibilidad del foco de teclado no es negociable.
-- **Orden DOM del sidebar:** en `main.ejs`, `<main>` aparece antes que `<aside>` en el HTML; la posición visual (sidebar a la izquierda) se logra únicamente con `order` de CSS flexbox, nunca reordenando el DOM.
+| Lesson | Level | Exercises | Skills Covered |
+|---|---|---|---|
+| 1.1 Intro to Greetings | Beginner | Translation, Speaking, Reading + comprehension | Writing, Speaking, Reading |
+| 1.2 Basic Verbs | Beginner | Word Bank, Reading + comprehension | Writing, Reading |
+| 2.1 Past Continuous | Elementary | Listening dictation, Listening cloze | Listening |
+| 2.2 Third Conditional | Elementary | Multiple choice (grammar) | Writing |
+| 3.1 Real-World Conversations | Conversational | Grammar, Translation, Listening cloze, Speaking, Reading + comprehension | All four skills |
 
 ---
 
-## Checklist WCAG 2.2 AA implementado
+## WCAG 2.2 AA Compliance
 
-Los siguientes criterios están cubiertos por el código tal como está estructurado. Nivel A y AA únicamente — no se implementó ningún criterio AAA.
+33 criteria implemented across the four POUR principles. Key decisions:
 
-**Perceptible:** 1.1.1, 1.2.1, 1.2.2, 1.3.1, 1.3.2, 1.3.3, 1.4.1, 1.4.2, 1.4.3, 1.4.4, 1.4.10, 1.4.11, 1.4.12
-
-**Operable:** 2.1.1, 2.1.2, 2.2.1, 2.3.1, 2.4.1, 2.4.2, 2.4.3, 2.4.4, 2.4.6, 2.4.7, 2.4.11, 2.5.3, 2.5.7, 2.5.8
-
-**Comprensible:** 3.1.1, 3.2.1, 3.2.2, 3.2.6, 3.3.1, 3.3.2, 3.3.3, 3.3.4, 3.3.7, 3.3.8
-
-**Robusto:** 4.1.2, 4.1.3
-
-Verificación recomendada antes de entrega: recorrido completo de cada página con Tab/Shift+Tab, prueba de lectura con NVDA en cada flujo (login → onboarding → lección → ejercicio → feedback → assessment), y validación de contraste con [WebAIM Contrast Checker](https://webaim.org/resources/contrastchecker/) sobre los tokens definidos en `src/public/css/base.css`.
-
----
-
-## Solución de problemas
-
-**Error `ECONNREFUSED` al arrancar** — PostgreSQL no está corriendo o `DATABASE_URL` en `.env` tiene datos incorrectos. Verifica con `psql -U postgres -d fluentpath` que puedes conectarte manualmente con esas mismas credenciales.
-
-**Error `relation "users" does not exist`** — las migraciones no se ejecutaron o se ejecutaron en la base de datos equivocada. Repite el paso de migraciones apuntando explícitamente a la base `fluentpath`.
-
-**La sesión no persiste entre requests** — revisa que `SESSION_SECRET` esté definido en `.env`. `connect-pg-simple` crea automáticamente la tabla `user_sessions` en el primer arranque; si falla, confirma que el usuario de PostgreSQL tiene permisos de `CREATE TABLE`.
-
-**Los ejercicios de listening/speaking no reproducen audio** — faltan los 4 archivos `.mp3` en `src/public/audio/` (ver sección correspondiente arriba).
-
-**Cambios en CSS/EJS no se reflejan** — si usas `npm start` en lugar de `npm run dev`, el servidor no observa cambios de archivo. Usa `npm run dev` durante el desarrollo.
+- No modals or pop-ups (feedback and onboarding are real pages)
+- No hover for vocabulary (always-visible cards)
+- No accessibility settings screen (accessible by default)
+- No voice recognition (speaking uses "I practiced this" button)
+- No background audio (only user-triggered exercise audio)
+- `aria-disabled` instead of `disabled` on Continue buttons
+- `focus.css` loaded last and never overridden
+- DOM order: main before sidebar, CSS handles visual placement
