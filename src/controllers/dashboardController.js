@@ -19,8 +19,8 @@ const dashboardController = {
       ]);
 
       // Calculate accuracy percentage
-      const accuracy = summary.total_completed > 0
-        ? Math.round((summary.total_correct / summary.total_completed) * 100)
+      const accuracy = summary.evaluable_completed > 0
+        ? Math.round((summary.evaluable_correct / summary.evaluable_completed) * 100)
         : 0;
 
       const dailyExercises = await UserProgress.countCompletedToday(userId);

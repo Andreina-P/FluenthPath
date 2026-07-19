@@ -10,8 +10,8 @@ const assessmentController = {
     try {
       const userStats = await UserStats.findByUser(req.session.user.id);
 
-      // If already assessed, show result instead
-      if (userStats && userStats.assessment_level) {
+      // If already assessed AND not retaking, show result instead
+      if (userStats && userStats.assessment_level && !req.session.retakingAssessment) {
         return res.redirect('/assessment/results');
       }
 
@@ -164,6 +164,7 @@ const assessmentController = {
 
       // Clean up
       delete req.session.assessment;
+      delete req.session.retakingAssessment;
 
       res.redirect('/assessment/results');
 
@@ -204,8 +205,11 @@ const assessmentController = {
    */
   async retake(req, res, next) {
     try {
-      await UserStats.setAssessmentLevel(req.session.user.id, null);
-      req.session.flash = { type: 'info', message: 'Your previous assessment has been cleared. You can take it again.' };
+      // Don't delete the level yet — only set a flag.
+      // Level is updated only when the user completes the new assessment.
+      // If they cancel, their old level stays intact.
+      req.session.retakingAssessment = true;
+      req.session.flash = { type: 'info', message: 'You can retake the assessment now. Your current level will be kept until you finish.' };
       res.redirect('/assessment');
     } catch (err) {
       next(err);

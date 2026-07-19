@@ -30,8 +30,8 @@ const progressController = {
       const skillPcts = await UserProgress.getSkillPercentages(userId);
       const dailyExercises = await UserProgress.countCompletedToday(userId);
 
-      const accuracy = summary.total_completed > 0
-        ? Math.round((summary.total_correct / summary.total_completed) * 100)
+      const accuracy = summary.evaluable_completed > 0
+        ? Math.round((summary.evaluable_correct / summary.evaluable_completed) * 100)
         : 0;
 
       // Mastery percentage (overall)

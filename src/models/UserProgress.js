@@ -65,10 +65,15 @@ const UserProgress = {
       `SELECT
          COUNT(*)::int                                          AS total_attempted,
          COUNT(*) FILTER (WHERE completed = TRUE)::int          AS total_completed,
-         COUNT(*) FILTER (WHERE correct = TRUE)::int            AS total_correct,
-         COUNT(DISTINCT lesson_id)::int                         AS lessons_touched
-       FROM user_progress
-       WHERE user_id = $1`,
+         COUNT(DISTINCT up.lesson_id)::int                         AS lessons_touched,
+         -- Accuracy: only count exercises that can be evaluated (not speaking/reading)
+         COUNT(*) FILTER (WHERE up.completed = TRUE
+           AND e.type NOT IN ('speaking','reading'))::int       AS evaluable_completed,
+         COUNT(*) FILTER (WHERE up.correct = TRUE
+           AND e.type NOT IN ('speaking','reading'))::int       AS evaluable_correct
+       FROM user_progress up
+       JOIN exercises e ON e.id = up.exercise_id
+       WHERE up.user_id = $1`,
       [userId]
     );
     return rows[0];
