@@ -49,8 +49,13 @@
       Sentence builder area.
       Shows selected words in order.
       Starts with a placeholder that disappears on first word.
+      WCAG 4.1.2: label lives OUTSIDE the div as adjacent text, not as
+      aria-label on the div itself (role="generic" doesn't accept it),
+      and not inside it either, since word-bank.js replaces this div's
+      innerHTML on every update and would wipe out an inner label.
     -->
-    <div aria-label="Your sentence" class="sentence-builder" id="sentence-builder">
+    <p class="sr-only" id="sentence-builder-label">Your sentence:</p>
+    <div class="sentence-builder" id="sentence-builder">
       <span id="builder-placeholder" class="sentence-builder__placeholder">
         Select words below to build your sentence.
       </span>

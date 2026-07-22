@@ -42,7 +42,8 @@
 
   <!-- Model audio -->
   <div class="audio-player">
-    <audio controls aria-label="Model pronunciation. Listen and repeat.">
+    <audio controls>
+        <!-- WCAG 4.1.2: accessible name via sr-only text, not aria-label on generic role -->
       <source src="<%= exercise.audio_url %>" type="audio/mpeg">
       Your browser does not support the audio element.
     </audio>

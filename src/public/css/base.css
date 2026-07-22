@@ -41,7 +41,7 @@
   /* Disabled states
      WCAG exception: inactive UI components have no contrast requirement */
   --fp-disabled-bg:     #E2E8F0;
-  --fp-disabled-text:   #94A3B8;
+  --fp-disabled-text:   #475569;  /* Changed from #94A3B8 (2.08:1) to #475569 (6.15:1 on #E2E8F0) */
   --fp-disabled-border: #CBD5E1;
 
   /* Gamification */

@@ -25,14 +25,14 @@
   </div>
 
   <!-- Title — receives focus on load -->
-  <h2
+  <h1
     class="feedback__title"
     tabindex="-1"
     data-autofocus
     style="text-align:center; margin-bottom:var(--fp-space-2);"
   >
     <%= isCorrect ? 'Correct!' : 'Not Quite There' %>
-  </h2>
+  </h1>
 
   <p style="text-align:center; color:var(--fp-text-2); max-width:none; margin-bottom:var(--fp-space-2);">
     <% if (isCorrect) { %>
@@ -59,7 +59,10 @@
             </svg>
             Your answer
           </p>
-          <p style="font-size:var(--fp-text-sm); text-decoration:line-through; color:var(--fp-error); margin:0;"><%= userAnswer %></p>
+          <p style="font-size:var(--fp-text-sm); color:var(--fp-error); margin:0;">
+            <s><%= userAnswer %></s>
+            <span class="sr-only"> (incorrect)</span>
+          </p>
         </div>
         <!-- Correct answer -->
         <div style="padding:var(--fp-space-3); border-radius:var(--fp-radius); background:var(--fp-success-tint);">

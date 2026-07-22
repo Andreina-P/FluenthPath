@@ -21,13 +21,13 @@
       const timerText = `${mins}:${secs.toString().padStart(2, '0')}`;
       const isWarning = remainingSeconds < 120;
     %>
-    <div class="assessment-timer<%= isWarning ? ' assessment-timer--warning' : '' %>"
-         aria-label="Time remaining: <%= mins %> minutes and <%= secs %> seconds">
+    <div class="assessment-timer<%= isWarning ? ' assessment-timer--warning' : '' %>">
       <svg class="assessment-timer__icon" aria-hidden="true" focusable="false" viewBox="0 0 16 16" fill="none">
         <circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5"/>
         <path d="M8 4v4l2.5 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
       </svg>
-      <span><%= timerText %></span>
+      <span class="sr-only">Time remaining: <%= mins %> minutes and <%= secs %> seconds.</span>
+      <span class="assessment-timer__value" aria-hidden="true"><%= timerText %></span>
     </div>
   <% } %>
 </div>
@@ -104,7 +104,7 @@
 <script>
 (function() {
   var remaining = <%= remainingSeconds %>;
-  var timerEl = document.querySelector('.assessment-timer span');
+  var timerEl = document.querySelector('.assessment-timer__value');
   if (!timerEl || remaining <= 0) return;
 
   var interval = setInterval(function() {
@@ -119,6 +119,9 @@
     var m = Math.floor(remaining / 60);
     var s = remaining % 60;
     timerEl.textContent = m + ':' + (s < 10 ? '0' : '') + s;
+
+    var srEl = document.querySelector('.assessment-timer .sr-only');
+    if (srEl) srEl.textContent = 'Time remaining: ' + m + ' minutes and ' + s + ' seconds.';
 
     // Warning state below 2 minutes
     var wrapper = document.querySelector('.assessment-timer');

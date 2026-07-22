@@ -51,7 +51,7 @@
           class="stat-badge stat-badge--success"
           
         >
-          <!-- Flame icon — aria-hidden, accessible name comes from aria-label above -->
+          <!-- Flame icon — aria-hidden; accessible name comes from the sr-only text below -->
           <svg aria-hidden="true" focusable="false" width="12" height="12" viewBox="0 0 12 12" fill="none">
             <path d="M6 1C6 1 9 4 9 7a3 3 0 11-6 0c0-1.5.75-3 1.5-3.5C4.5 4.5 6 6 6 6V1z" fill="currentColor"/>
           </svg>
@@ -77,9 +77,9 @@
               -->
               <a
                 href="/lessons/<%= lesson.id %>"
-                style="display:block; font-size:0.8125rem; color:var(--fp-text-1); text-decoration:none; padding:0.375rem 0.5rem; border-radius:var(--fp-radius-sm);"
-                onmouseover="this.style.background='var(--fp-bg)'"
-                onmouseout="this.style.background=''"
+                class="sidebar-lesson-link" style="display:block; font-size:0.8125rem; color:var(--fp-text-1); text-decoration:none; padding:0.375rem 0.5rem;"
+                
+                
               >
                 <%= lesson.title %>
               </a>

@@ -230,3 +230,12 @@ main:focus {
     padding-right: var(--fp-space-3);
   }
 }
+
+
+/* Sidebar recent lesson links — hover and focus states via CSS.
+   Replaces inline onmouseover/onmouseout (device-dependent). */
+.sidebar-lesson-link:hover,
+.sidebar-lesson-link:focus-visible {
+  background: var(--fp-bg);
+  border-radius: var(--fp-radius-sm);
+}
