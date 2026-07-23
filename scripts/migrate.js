@@ -23,17 +23,45 @@ const client = new Client({
 const migrationsDir = path.join(__dirname, '..', 'database', 'migrations');
 const seedsDir = path.join(__dirname, '..', 'database', 'seeds');
 
+async function initHistoryTable() {
+  await client.query(`
+    CREATE TABLE IF NOT EXISTS script_history (
+      id SERIAL PRIMARY KEY,
+      filename VARCHAR(255) UNIQUE NOT NULL,
+      executed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )
+  `);
+}
+
+async function hasRun(filename) {
+  const { rows } = await client.query('SELECT id FROM script_history WHERE filename = $1', [filename]);
+  return rows.length > 0;
+}
+
+async function markAsRun(filename) {
+  await client.query('INSERT INTO script_history (filename) VALUES ($1)', [filename]);
+}
+
 async function runSqlFile(filePath) {
-  console.log(`Ejecutando ${path.basename(filePath)}...`);
+  const filename = path.basename(filePath);
+  if (await hasRun(filename)) {
+    console.log(`- Saltando ${filename} (ya fue ejecutado anteriormente)`);
+    return;
+  }
+  
+  console.log(`Ejecutando ${filename}...`);
   const sql = fs.readFileSync(filePath, 'utf8');
   await client.query(sql);
-  console.log(`✓ ${path.basename(filePath)} ejecutado exitosamente.`);
+  await markAsRun(filename);
+  console.log(`✓ ${filename} ejecutado exitosamente.`);
 }
 
 async function run() {
   try {
     await client.connect();
     console.log(`Conectado a la base de datos PostgreSQL`);
+
+    await initHistoryTable();
 
     // Ejecutar Migraciones
     if (fs.existsSync(migrationsDir)) {
