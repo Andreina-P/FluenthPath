@@ -119,7 +119,11 @@ const authController = {
 
       const returnTo = req.session.returnTo || '/dashboard';
       delete req.session.returnTo;
-      res.redirect(returnTo);
+      
+      req.session.save((err) => {
+        if (err) console.error('Session save error during register:', err);
+        res.redirect(returnTo);
+      });
 
     } catch (err) {
       console.error('Register error:', err);
@@ -187,7 +191,11 @@ const authController = {
       // Redirect to intended page or dashboard
       const returnTo = req.session.returnTo || '/dashboard';
       delete req.session.returnTo;
-      res.redirect(returnTo);
+      
+      req.session.save((err) => {
+        if (err) console.error('Session save error during login:', err);
+        res.redirect(returnTo);
+      });
 
     } catch (err) {
       console.error('Login error:', err);
